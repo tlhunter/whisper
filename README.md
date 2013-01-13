@@ -2,7 +2,7 @@
 Ephemeral, geo-location based communication
 
 ## Screenshot
-[https://raw.github.com/tlhunter/whisper/master/screenshot.png](Screenshot)
+[Screenshot](https://raw.github.com/tlhunter/whisper/master/screenshot.png)
 
 ## Technologies
 * REDIS for storing messages
