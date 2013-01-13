@@ -3,6 +3,7 @@ var web = express();
 var server = require('http').createServer(web);
 var io = require('socket.io').listen(server);
 var geohash = require('ngeohash');
+var _ = require('underscore')._;
 
 //var redis = require('redis');
 //var redisClient = redis.createClient();
@@ -26,12 +27,31 @@ io.sockets.on('connection', function(socket) {
     socket.on('location', function(coords) {
         var hash = geohash.encode(coords.latitude, coords.longitude, geohashAccuracy);
 
-        // TODO This joins all possible rooms every update. Should disconnect from old rooms and not double reconnect.
-        var roomName = '';
+        // This is a list of all the rooms I should be in based on my geo hash
+        var roomsToBeIn = [];
+
+        // Building list of rooms to be in
+        var roomsCurrentlyIn = _.keys(io.sockets.manager.roomClients[socket.id]);
+        roomsCurrentlyIn.shift(); // remove first blank room
+        for (index in roomsCurrentlyIn) {
+            roomsCurrentlyIn[index] = roomsCurrentlyIn[index].slice(1); // Remove room leading slash
+        }
+
         for (var i = geohashAccuracy; i > geohashAccuracy - geohashLevels; i--) {
             roomName = hash.substring(0, i);
-            socket.join(roomName);
-            console.log(' joined ' + roomName);
+            roomsToBeIn.push(roomName);
+        }
+
+        // Rooms I need to join
+        var roomsToJoin = _.difference(roomsToBeIn, roomsCurrentlyIn);
+        for (var joinIndex in roomsToJoin) {
+            socket.join(roomsToJoin[joinIndex]);
+        }
+
+        // Rooms I need to leave
+        var roomsToLeave = _.difference(roomsCurrentlyIn, roomsToBeIn);
+        for (var leaveIndex in roomsToLeave) {
+            socket.leave(roomsToLeave[leaveIndex]);
         }
     });
 
