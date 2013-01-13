@@ -57,13 +57,17 @@ $(function() {
         event.preventDefault();
         initiateGeoLocation();
         var message = $messageInput.val() || '';
-        $messageInput.val('');
         var size = $('#size input:checked').val() || null;
-        if (!message || !size) {
+        if (!size) {
+            console.log('hacker');
+            return;
+        }
+
+        if (!message) {
             displayMessage({
                 time: new Date(),
                 size: 0,
-                body: "You must provide a message and select a size."
+                body: "You must provide a message."
             });
             return;
         }
@@ -76,6 +80,8 @@ $(function() {
             });
             return;
         }
+
+        $messageInput.val('');
 
         socket.emit('message-to-server', {
             size: parseInt(size, 10),
