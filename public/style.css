@@ -1,0 +1,42 @@
+body {
+    font-size: 12px;
+    font-family: arial;
+    color: #fff;
+    background-color: #000;
+}
+a {
+    color: #006fff;
+}
+#messages {
+    height: 300px;
+    overflow: auto;
+}
+#messages .time {
+}
+.size-1 { color: #ff9900 !important; } /* WHISPER */
+.size-2 { color: #ddff00 !important; }
+.size-3 { color: #00ff66 !important; }
+.size-4 { color: #00ffff !important; }
+.size-5 { color: #0099ff !important; } /* SHOUT */
+#map {
+    height: 0px;
+}
+#compose {
+    margin-top: 20px;
+}
+#message {
+    height: 80px;
+    width: 100%;
+    background-color: #000;
+    border: 1px solid #666;
+    font-size: 11px;
+    color: #fff;
+}
+#data {
+    color: #fff;
+}
+#messages,
+#data,
+#message {
+    font-family: Monaco, Menlo, Consolas, Courier;
+}
