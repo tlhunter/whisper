@@ -32,5 +32,9 @@ This will be a webpage, very simple, works on mobile, uses HTML5 geolocation API
 * Loudness slider
 * Send button
 
+## Debugging
+This chrome extension makes debugging a bit easier (so you don't have to walk around with a laptop):
+[Manual Geolocation] (https://chrome.google.com/webstore/detail/manual-geolocation/mfodligkojepnddfhkbkodbamcagfhlo)
+
 ## License
 BSD
