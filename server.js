@@ -83,7 +83,7 @@ io.sockets.on('connection', function(socket) {
 
         // Determine the specificity we need
         var hash = geohash.encode(coords.latitude, coords.longitude, GEOHASH_ACCURACY);
-        var roomName = hash.substring(0, GEOHASH_ACCURACY - size);
+        var roomName = hash.substring(0, GEOHASH_ACCURACY - (size - 1));
 
         // Send message
         io.sockets.in(roomName).emit('message-to-client', {
