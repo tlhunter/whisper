@@ -7,7 +7,6 @@ $(function() {
     var $enableGeo = $('#enable-geo');
     var $data = $('#data');
 
-    var uuids = [];
 
     // My last known location
     var coords = {};
@@ -22,11 +21,6 @@ $(function() {
     // I received a message from the server
     socket.on('message-to-client', function (data) {
         console.log(data);
-        if (uuids.indexOf(data.uuid) >= 0) {
-            return;
-        }
-
-        uuids.push(data.uuid);
         displayMessage(data);
     });
 

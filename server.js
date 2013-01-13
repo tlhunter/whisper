@@ -60,16 +60,14 @@ io.sockets.on('connection', function(socket) {
         var hash = geohash.encode(coords.latitude, coords.longitude, geohashAccuracy);
 
         console.log(size, time, body, coords, hash);
-        for (var i = geohashAccuracy; i > geohashAccuracy - size; i--) {
-            roomName = hash.substring(0, i);
-            console.log('transmitted ' + uuid + ' message to ' + roomName);
-            io.sockets.in(roomName).emit('message-to-client', {
-                time: time,
-                size: size,
-                body: body,
-                uuid: uuid
-            });
-        }
+        var roomName = hash.substring(0, geohashAccuracy - size);
+        console.log('transmitted ' + uuid + ' message to ' + roomName);
+        io.sockets.in(roomName).emit('message-to-client', {
+            time: time,
+            size: size,
+            body: body,
+            uuid: uuid
+        });
         
     });
 });
