@@ -3,13 +3,12 @@ var web = express();
 var server = require('http').createServer(web);
 var io = require('socket.io').listen(server);
 var geohash = require('ngeohash');
-var uuid = require('node-uuid');
 
 //var redis = require('redis');
 //var redisClient = redis.createClient();
 
 var messages = [];
-
+var uuid = 1;
 var geohashAccuracy = 9;
 var geohashLevels = 5;
 
@@ -37,6 +36,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('message-to-server', function(data) {
+        uuid++;
         var size = parseInt(data.size, 10);
         var time = new Date();
         var body = data.body.substring(0, 255);
@@ -57,18 +57,17 @@ io.sockets.on('connection', function(socket) {
             return;
         }
 
-        var id = uuid.v4();
         var hash = geohash.encode(coords.latitude, coords.longitude, geohashAccuracy);
 
         console.log(size, time, body, coords, hash);
         for (var i = geohashAccuracy; i > geohashAccuracy - size; i--) {
             roomName = hash.substring(0, i);
-            console.log('transmitted ' + id + ' message to ' + roomName);
+            console.log('transmitted ' + uuid + ' message to ' + roomName);
             io.sockets.in(roomName).emit('message-to-client', {
                 time: time,
                 size: size,
                 body: body,
-                uuid: id
+                uuid: uuid
             });
         }
         
