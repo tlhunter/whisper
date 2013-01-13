@@ -7,6 +7,8 @@ $(function() {
     var $enableGeo = $('#enable-geo');
     var $data = $('#data');
 
+    var uuids = [];
+
     // My last known location
     var coords = {};
 
@@ -20,6 +22,11 @@ $(function() {
     // I received a message from the server
     socket.on('message-to-client', function (data) {
         console.log(data);
+        if (uuids.indexOf(data.uuid) >= 0) {
+            return;
+        }
+
+        uuids.push(data.uuid);
         displayMessage(data);
     });
 
@@ -29,18 +36,25 @@ $(function() {
         $messageInput.removeClass().addClass('size-'+size);
     });
 
-    var setNewCoordinates = function(c) {
-        $data.html("Latitude: " + c.latitude + "<br />Longitude: " + c.longitude + "<br />Accuracy: " + c.accuracy);
-        coords = c;
+    var transmitLocation = function() {
+        socket.emit('location', coords);
     };
 
-    var handleGeoLocation = function(pos) {
-        setNewCoordinates(pos.coords);
+    var setNewCoordinates = function(pos) {
+        var c = pos.coords;
+        console.log(c);
+        $data.html("Latitude: " + c.latitude + "<br />Longitude: " + c.longitude + "<br />Accuracy: " + c.accuracy);
+        coords = c;
+        transmitLocation();
     };
 
     var initiateGeoLocation = function() {
-        navigator.geolocation.getCurrentPosition(handleGeoLocation);
+        navigator.geolocation.getCurrentPosition(setNewCoordinates);
     };
+
+    setInterval(initiateGeoLocation, 60*1000);
+
+    initiateGeoLocation();
 
     $compose.submit(function(event) {
         event.preventDefault();
@@ -72,6 +86,4 @@ $(function() {
             coords: coords
         });
     });
-
-    initiateGeoLocation();
 });

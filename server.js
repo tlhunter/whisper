@@ -3,11 +3,15 @@ var web = express();
 var server = require('http').createServer(web);
 var io = require('socket.io').listen(server);
 var geohash = require('ngeohash');
+var uuid = require('node-uuid');
 
 //var redis = require('redis');
 //var redisClient = redis.createClient();
 
 var messages = [];
+
+var geohashAccuracy = 9;
+var geohashLevels = 5;
 
 web.use('/', express.static(__dirname + '/public'));
 
@@ -20,24 +24,53 @@ io.sockets.on('connection', function(socket) {
         body: "Socket Connection Established",
     });
 
+    socket.on('location', function(coords) {
+        var hash = geohash.encode(coords.latitude, coords.longitude, geohashAccuracy);
+
+        // TODO This joins all possible rooms every update. Should disconnect from old rooms and not double reconnect.
+        var roomName = '';
+        for (var i = geohashAccuracy; i > geohashAccuracy - geohashLevels; i--) {
+            roomName = hash.substring(0, i);
+            socket.join(roomName);
+            console.log(' joined ' + roomName);
+        }
+    });
+
     socket.on('message-to-server', function(data) {
         var size = parseInt(data.size, 10);
         var time = new Date();
         var body = data.body.substring(0, 255);
-        var coords = {
-            lat: data.coords.latitude,
-            lon: data.coords.longitude
-        };
+        var coords = data.coords;
+        if (size < 1 || size > 5) {
+            console.log('invalid size', size);
+            return;
+        }
+        if (!body) {
+            console.log('invalid body', body);
+            return;
+        }
+        coords.latitude = parseFloat(coords.latitude);
+        coords.longitude = parseFloat(coords.longitude);
 
-        var hash = geohash.encode(coords.lat, coords.lon);
+        if (coords.latitude > 90 || coords.latitude < -90 || coords.longitude > 180 || coords.longitude < -180) {
+            console.log('invalid coords', coords);
+        }
 
-        // Transmit to a few different geogash room names, instead of everyone
+        var id = uuid.v4();
+        var hash = geohash.encode(coords.latitude, coords.longitude, geohashAccuracy);
+
         console.log(size, time, body, coords, hash);
-        io.sockets.emit('message-to-client', {
-            time: time,
-            size: size,
-            body: body
-        });
+        for (var i = geohashAccuracy; i > geohashAccuracy - size; i--) {
+            roomName = hash.substring(0, i);
+            console.log('transmitted ' + id + ' message to ' + roomName);
+            io.sockets.in(roomName).emit('message-to-client', {
+                time: time,
+                size: size,
+                body: body,
+                uuid: id
+            });
+        }
+        
     });
 });
 
