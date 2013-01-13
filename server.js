@@ -54,6 +54,7 @@ io.sockets.on('connection', function(socket) {
 
         if (coords.latitude > 90 || coords.latitude < -90 || coords.longitude > 180 || coords.longitude < -180) {
             console.log('invalid coords', coords);
+            return;
         }
 
         var id = uuid.v4();
