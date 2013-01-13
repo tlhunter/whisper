@@ -46,7 +46,7 @@ $(function() {
         navigator.geolocation.getCurrentPosition(setNewCoordinates);
     };
 
-    setInterval(initiateGeoLocation, 60*1000);
+    setInterval(initiateGeoLocation, 30*1000);
 
     initiateGeoLocation();
 
