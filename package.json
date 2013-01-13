@@ -1,0 +1,13 @@
+{
+    "name": "node-whisper",
+    "version": "0.1.0",
+    "author": "Thomas Hunter <tlhunter@gmail.com>",
+    "dependencies": {
+        "express": ">=3.0.6",
+        "hiredis": ">=0.1.14",
+        "ngeohash": ">=0.2.0",
+        "redis": ">=0.8.2",
+        "socket.io": ">=0.9.13",
+        "underscore": ">=1.4.3"
+    }
+}
