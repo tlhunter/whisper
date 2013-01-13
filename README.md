@@ -1,6 +1,9 @@
 # Whisper
 Ephemeral, geo-location based communication
 
+## Screenshot
+[https://raw.github.com/tlhunter/whisper/master/screenshot.png](Screenshot)
+
 ## Technologies
 * REDIS for storing messages
 * Node.js for web server
