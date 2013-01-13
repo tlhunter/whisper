@@ -13,6 +13,7 @@ a {
 }
 #messages .time {
 }
+.size-0 { color: #ff0000 !important; } /* ERROR */
 .size-1 { color: #ff9900 !important; } /* WHISPER */
 .size-2 { color: #ddff00 !important; }
 .size-3 { color: #00ff66 !important; }
