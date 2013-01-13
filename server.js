@@ -8,11 +8,11 @@ var _ = require('underscore')._;
 //var redis = require('redis');
 //var redisClient = redis.createClient();
 
-var messages = [];
 var uuid = 1;
-var geohashAccuracy = 9;
-var geohashLevels = 5;
+var GEOHASH_ACCURACY = 9;
+var GEOHASH_LEVELS = 5;
 
+// I really shouldn't be using express.js for this...
 web.use('/', express.static(__dirname + '/public'));
 
 server.listen(80);
@@ -25,7 +25,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('location', function(coords) {
-        var hash = geohash.encode(coords.latitude, coords.longitude, geohashAccuracy);
+        var hash = geohash.encode(coords.latitude, coords.longitude, GEOHASH_ACCURACY);
 
         // This is a list of all the rooms I should be in based on my geo hash
         var roomsToBeIn = [];
@@ -37,7 +37,7 @@ io.sockets.on('connection', function(socket) {
             roomsCurrentlyIn[index] = roomsCurrentlyIn[index].slice(1); // Remove room leading slash
         }
 
-        for (var i = geohashAccuracy; i > geohashAccuracy - geohashLevels; i--) {
+        for (var i = GEOHASH_ACCURACY; i > GEOHASH_ACCURACY - GEOHASH_LEVELS; i--) {
             roomName = hash.substring(0, i);
             roomsToBeIn.push(roomName);
         }
@@ -56,11 +56,12 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('message-to-server', function(data) {
-        uuid++;
         var size = parseInt(data.size, 10);
         var time = new Date();
         var body = data.body.substring(0, 255);
         var coords = data.coords;
+
+        // Validations
         if (size < 1 || size > 5) {
             console.log('invalid size', size);
             return;
@@ -77,11 +78,14 @@ io.sockets.on('connection', function(socket) {
             return;
         }
 
-        var hash = geohash.encode(coords.latitude, coords.longitude, geohashAccuracy);
+        // Increment Unique ID
+        uuid++;
 
-        console.log(size, time, body, coords, hash);
-        var roomName = hash.substring(0, geohashAccuracy - size);
-        console.log('transmitted ' + uuid + ' message to ' + roomName);
+        // Determine the specificity we need
+        var hash = geohash.encode(coords.latitude, coords.longitude, GEOHASH_ACCURACY);
+        var roomName = hash.substring(0, GEOHASH_ACCURACY - size);
+
+        // Send message
         io.sockets.in(roomName).emit('message-to-client', {
             time: time,
             size: size,

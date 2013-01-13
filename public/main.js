@@ -7,9 +7,12 @@ $(function() {
     var $enableGeo = $('#enable-geo');
     var $data = $('#data');
 
-
     // My last known location
-    var coords = {};
+    var coords = {
+        latitude: null,
+        longitude: null,
+        accuracy: null
+    };
 
     // Display a message in the DOM
     var displayMessage = function(data) {
