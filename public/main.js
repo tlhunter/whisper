@@ -70,8 +70,8 @@ $(function() {
         event.preventDefault();
         initiateGeoLocation();
         var message = $messageInput.val() || '';
-        var size = $('#size input:checked').val() || null;
-        if (!size) {
+        var size = parseInt($('#size input:checked').val(), 10);
+        if (size === null || size === '') {
             console.log('hacker');
             return;
         }
@@ -79,7 +79,7 @@ $(function() {
         if (!message) {
             displayMessage({
                 time: new Date(),
-                size: 0,
+                size: 5,
                 body: "You must provide a message."
             });
             return;
@@ -88,7 +88,7 @@ $(function() {
         if (!coords.latitude || !coords.longitude) {
             displayMessage({
                 time: new Date(),
-                size: 0,
+                size: 5,
                 body: "I am unsure of your position."
             });
             return;

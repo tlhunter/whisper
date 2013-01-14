@@ -8,14 +8,14 @@ var redis = require('redis').createClient();
 
 var uuid = 1;
 var GEOHASH_ACCURACY = 9;
-var GEOHASH_LEVELS = 5;
+var GEOHASH_LEVELS = [ 8, 5, 4, 3, 2 ];
 var EXPIRATION = [
     -1,     // Error
-    86400,  // Level 1 = 24 Hours
-    28800,  // Level 2 = 8 Hours
-    3600,   // Level 3 = 1 Hour
-    600,    // Level 4 = 10 Minutes
-    10      // Level 5 = 10 Seconds
+    172800,  // Level 1 = 48 Hours
+    43200,  // Level 2 = 12 Hours
+    7200,   // Level 3 = 2 Hours
+    1200,    // Level 4 = 20 Minutes
+    30      // Level 5 = 30 Seconds
 ];
 
 // I really shouldn't be using express.js for this...
@@ -26,7 +26,7 @@ server.listen(80);
 io.sockets.on('connection', function(socket) {
     socket.emit('message-to-client', {
         time: new Date(),
-        size: 0,
+        size: 5,
         body: "Socket Connection Established",
         uuid: 0,
     });
@@ -44,8 +44,8 @@ io.sockets.on('connection', function(socket) {
             roomsCurrentlyIn[index] = roomsCurrentlyIn[index].slice(1); // Remove room leading slash
         }
 
-        for (var i = GEOHASH_ACCURACY; i > GEOHASH_ACCURACY - GEOHASH_LEVELS; i--) {
-            roomName = hash.substring(0, i);
+        for (var i = 0; i < GEOHASH_LEVELS.length; i++) {
+            roomName = hash.substring(0, GEOHASH_LEVELS[i]);
             roomsToBeIn.push(roomName);
         }
 
@@ -59,7 +59,6 @@ io.sockets.on('connection', function(socket) {
 
                 // The - below is on purpose
                 redis.keys('msg:'+thisRoom+'-*', function(err, result) {
-                    console.log(thisRoom);
                     if (err) {
                         socket.emit('error', {
                             message: "Error grabbing messages from " + thisRoom
@@ -99,7 +98,7 @@ io.sockets.on('connection', function(socket) {
         var coords = data.coords;
 
         // Validations
-        if (size < 1 || size > 5) {
+        if (size < 0 || size > 4) {
             console.log('invalid size', size);
             return;
         }
@@ -120,7 +119,7 @@ io.sockets.on('connection', function(socket) {
 
         // Determine the specificity we need
         var hash = geohash.encode(coords.latitude, coords.longitude, GEOHASH_ACCURACY);
-        var roomName = hash.substring(0, GEOHASH_ACCURACY - (size - 1));
+        var roomName = hash.substring(0, GEOHASH_LEVELS[size]);
 
         redis.hmset([
                 'msg:'+roomName+'-'+uuid,

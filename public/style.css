@@ -13,12 +13,12 @@ a {
 }
 #messages .time {
 }
-.size-0 { color: #ff0000 !important; } /* ERROR */
-.size-1 { color: #ff9900 !important; } /* WHISPER */
-.size-2 { color: #ddff00 !important; }
-.size-3 { color: #00ff66 !important; }
-.size-4 { color: #00ffff !important; }
-.size-5 { color: #0099ff !important; } /* SHOUT */
+.size-0 { color: #ff9900 !important; } /* WHISPER */
+.size-1 { color: #ddff00 !important; }
+.size-2 { color: #00ff66 !important; }
+.size-3 { color: #00ffff !important; }
+.size-4 { color: #0099ff !important; } /* SHOUT */
+.size-5 { color: #ff0000 !important; } /* ERROR */
 #map {
     height: 0px;
 }
