@@ -7,6 +7,8 @@ $(function() {
     var $enableGeo = $('#enable-geo');
     var $data = $('#data');
 
+    var uuids = [];
+
     // My last known location
     var coords = {
         latitude: null,
@@ -18,12 +20,18 @@ $(function() {
     var displayMessage = function(data) {
         // This probably only works in Chrome...
         var date = new Date(data.time).toLocaleTimeString();
-        $messages.prepend('<div class="message size-' + data.size + '"><time>' + date + '</time>: ' + data.body + '</div>');
+        $messages.prepend('<div data-uuid="' + data.uuid + '" class="message size-' + data.size + '"><time>' + date + '</time>: ' + data.body + '</div>');
     };
 
     // I received a message from the server
     socket.on('message-to-client', function (data) {
         console.log(data);
+
+        if (uuids.indexOf(data.uuid) >= 0) {
+            return;
+        }
+        uuids.push(data.uuid);
+
         displayMessage(data);
     });
 

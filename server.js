@@ -28,6 +28,7 @@ io.sockets.on('connection', function(socket) {
         time: new Date(),
         size: 0,
         body: "Socket Connection Established",
+        uuid: 0,
     });
 
     socket.on('location', function(coords) {
@@ -54,10 +55,35 @@ io.sockets.on('connection', function(socket) {
             socket.join(roomsToJoin[joinIndex]);
         }
 
+        // Only need to notify of the vaguest room being joined, which should always be the last one. TODO confirm this.
+        var vaguestRoom = roomsToJoin[roomsToJoin.length-1];
+        redis.keys('msg:'+vaguestRoom+'*', function(err, result) {
+            if (err) {
+                socket.emit('error', {
+                    message: "Error grabbing messages from " + vaguestRoom
+                });
+                return;
+            }
+            for (var i in result) {
+                redis.hgetall(result[i], function(err, result) {
+                    if (err) {
+                        return;
+                    }
+                    socket.emit('message-to-client', {
+                        time: result.time,
+                        size: parseInt(result.size, 10),
+                        body: result.message,
+                        uuid: parseInt(result.uuid, 10)
+                    });
+                });
+            }
+        });
+
         // Rooms I need to leave
         var roomsToLeave = _.difference(roomsCurrentlyIn, roomsToBeIn);
         for (var leaveIndex in roomsToLeave) {
             socket.leave(roomsToLeave[leaveIndex]);
+            // TODO Send message to client to delete messages tied to these rooms
         }
     });
 
@@ -98,7 +124,8 @@ io.sockets.on('connection', function(socket) {
                 'latitude', coords.latitude,
                 'longitude', coords.longitude,
                 'time', time,
-                'size', size
+                'size', size,
+                'uuid', uuid
             ],
             function(err, result) {
                 if (err) {
