@@ -37,12 +37,14 @@ $(function() {
 
     socket.on('leave-area', function(data) {
         console.log('leave-area', data);
+        $messages.hide();
         for (var index in data.areas) {
             $('#messages .message[data-area=' + data.areas[index] + ']').each(function() {
                 uuids.splice(uuids.indexOf($(this).attr('data-uuid')), 1);
                 $(this).remove();
             });
         }
+        $messages.show();
     });
 
     // OMG ERROR
