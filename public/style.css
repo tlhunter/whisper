@@ -41,3 +41,9 @@ a {
 #message {
     font-family: Monaco, Menlo, Consolas, Courier;
 }
+#size input {
+    margin-right: 10px;
+}
+#size label {
+    margin-left: 10px;
+}
