@@ -5,8 +5,8 @@ var io = require('socket.io').listen(server);
 var geohash = require('ngeohash');
 var _ = require('underscore')._;
 var redis = require('redis').createClient();
+var uuid = require('node-uuid');
 
-var uuid = 1;
 var GEOHASH_ACCURACY = 9;
 var GEOHASH_LEVELS = [ 8, 5, 4, 3, 2 ];
 var EXPIRATION = [
@@ -75,7 +75,7 @@ io.sockets.on('connection', function(socket) {
                                 time: result.time,
                                 size: parseInt(result.size, 10),
                                 body: result.message,
-                                uuid: parseInt(result.uuid, 10)
+                                uuid: result.uuid
                             });
                         });
                     }
@@ -114,22 +114,21 @@ io.sockets.on('connection', function(socket) {
             return;
         }
 
-        // Increment Unique ID
-        uuid++;
+        var id = uuid.v1();
 
         // Determine the specificity we need
         var hash = geohash.encode(coords.latitude, coords.longitude, GEOHASH_ACCURACY);
         var roomName = hash.substring(0, GEOHASH_LEVELS[size]);
 
         redis.hmset([
-                'msg:'+roomName+'-'+uuid,
+                'msg:'+roomName+'-'+id,
                 'geohash', hash,
                 'message', body,
                 'latitude', coords.latitude,
                 'longitude', coords.longitude,
                 'time', time,
                 'size', size,
-                'uuid', uuid
+                'uuid', id
             ],
             function(err, result) {
                 if (err) {
@@ -140,14 +139,14 @@ io.sockets.on('connection', function(socket) {
                     return;
                 }
 
-                redis.expire('msg:'+roomName+'-'+uuid, EXPIRATION[size]);
+                redis.expire('msg:'+roomName+'-'+id, EXPIRATION[size]);
 
                 // Send message
                 io.sockets.in(roomName).emit('message-to-client', {
                     time: time,
                     size: size,
                     body: body,
-                    uuid: uuid
+                    uuid: id
                 });
             }
         );
