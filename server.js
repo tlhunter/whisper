@@ -62,6 +62,7 @@ io.sockets.on('connection', function(socket) {
                 socket.emit('error', {
                     message: "Error grabbing messages from " + vaguestRoom
                 });
+                console.log(err);
                 return;
             }
             for (var i in result) {
@@ -132,6 +133,7 @@ io.sockets.on('connection', function(socket) {
                     socket.emit('error', {
                         message: "There was an error persisting your message to the database"
                     });
+                    console.log(err);
                     return;
                 }
 
