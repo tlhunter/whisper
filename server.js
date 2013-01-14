@@ -4,13 +4,19 @@ var server = require('http').createServer(web);
 var io = require('socket.io').listen(server);
 var geohash = require('ngeohash');
 var _ = require('underscore')._;
-
-//var redis = require('redis');
-//var redisClient = redis.createClient();
+var redis = require('redis').createClient();
 
 var uuid = 1;
 var GEOHASH_ACCURACY = 9;
 var GEOHASH_LEVELS = 5;
+var EXPIRATION = [
+    -1,     // Error
+    86400,  // Level 1 = 24 Hours
+    28800,  // Level 2 = 8 Hours
+    3600,   // Level 3 = 1 Hour
+    600,    // Level 4 = 10 Minutes
+    10      // Level 5 = 10 Seconds
+];
 
 // I really shouldn't be using express.js for this...
 web.use('/', express.static(__dirname + '/public'));
@@ -85,13 +91,35 @@ io.sockets.on('connection', function(socket) {
         var hash = geohash.encode(coords.latitude, coords.longitude, GEOHASH_ACCURACY);
         var roomName = hash.substring(0, GEOHASH_ACCURACY - (size - 1));
 
-        // Send message
-        io.sockets.in(roomName).emit('message-to-client', {
-            time: time,
-            size: size,
-            body: body,
-            uuid: uuid
-        });
+        redis.hmset([
+                'msg:'+roomName+'-'+uuid,
+                'geohash', hash,
+                'message', body,
+                'latitude', coords.latitude,
+                'longitude', coords.longitude,
+                'time', time,
+                'size', size
+            ],
+            function(err, result) {
+                if (err) {
+                    socket.emit('error', {
+                        message: "There was an error persisting your message to the database"
+                    });
+                    return;
+                }
+
+                redis.expire('msg:'+roomName+'-'+uuid, EXPIRATION[size]);
+
+                // Send message
+                io.sockets.in(roomName).emit('message-to-client', {
+                    time: time,
+                    size: size,
+                    body: body,
+                    uuid: uuid
+                });
+            }
+        );
+
         
     });
 });
