@@ -10,10 +10,10 @@ var uuid = require('node-uuid');
 var GEOHASH_ACCURACY = 9;
 var GEOHASH_LEVELS = [ 8, 5, 4, 3, 2 ];
 var EXPIRATION = [
-    172800,  // Level 1 = 48 Hours
+    172800, // Level 1 = 48 Hours
     43200,  // Level 2 = 12 Hours
     7200,   // Level 3 = 2 Hours
-    1200,    // Level 4 = 20 Minutes
+    1200,   // Level 4 = 20 Minutes
     30      // Level 5 = 30 Seconds
 ];
 
@@ -27,7 +27,7 @@ io.sockets.on('connection', function(socket) {
         time: new Date(),
         size: 5,
         body: "Socket Connection Established",
-        uuid: 0,
+        uuid: 0
     });
 
     socket.on('location', function(coords) {
@@ -39,10 +39,11 @@ io.sockets.on('connection', function(socket) {
         // Building list of rooms to be in
         var roomsCurrentlyIn = _.keys(io.sockets.manager.roomClients[socket.id]);
         roomsCurrentlyIn.shift(); // remove first blank room
-        for (index in roomsCurrentlyIn) {
+        for (var index in roomsCurrentlyIn) {
             roomsCurrentlyIn[index] = roomsCurrentlyIn[index].slice(1); // Remove room leading slash
         }
 
+        var roomName = '';
         for (var i = 0; i < GEOHASH_LEVELS.length; i++) {
             roomName = hash.substring(0, GEOHASH_LEVELS[i]);
             roomsToBeIn.push(roomName);
@@ -129,7 +130,7 @@ io.sockets.on('connection', function(socket) {
                 'size', size,
                 'uuid', id
             ],
-            function(err, result) {
+            function(err) {
                 if (err) {
                     socket.emit('error', {
                         message: "There was an error persisting your message to the database"
