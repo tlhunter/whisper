@@ -52,33 +52,37 @@ io.sockets.on('connection', function(socket) {
         // Rooms I need to join
         var roomsToJoin = _.difference(roomsToBeIn, roomsCurrentlyIn);
         for (var joinIndex in roomsToJoin) {
-            socket.join(roomsToJoin[joinIndex]);
-        }
+            // hey look, I'm javascript, who needs scoping outside of function blocks herp derp
+            (function(joinIndex) {
+                var thisRoom = roomsToJoin[joinIndex];
+                socket.join(thisRoom);
 
-        // Only need to notify of the vaguest room being joined, which should always be the last one. TODO confirm this.
-        var vaguestRoom = roomsToJoin[roomsToJoin.length-1];
-        redis.keys('msg:'+vaguestRoom+'*', function(err, result) {
-            if (err) {
-                socket.emit('error', {
-                    message: "Error grabbing messages from " + vaguestRoom
-                });
-                console.log(err);
-                return;
-            }
-            for (var i in result) {
-                redis.hgetall(result[i], function(err, result) {
+                // The - below is on purpose
+                redis.keys('msg:'+thisRoom+'-*', function(err, result) {
+                    console.log(thisRoom);
                     if (err) {
+                        socket.emit('error', {
+                            message: "Error grabbing messages from " + thisRoom
+                        });
+                        console.log(err);
                         return;
                     }
-                    socket.emit('message-to-client', {
-                        time: result.time,
-                        size: parseInt(result.size, 10),
-                        body: result.message,
-                        uuid: parseInt(result.uuid, 10)
-                    });
+                    for (var i in result) {
+                        redis.hgetall(result[i], function(err, result) {
+                            if (err) {
+                                return;
+                            }
+                            socket.emit('message-to-client', {
+                                time: result.time,
+                                size: parseInt(result.size, 10),
+                                body: result.message,
+                                uuid: parseInt(result.uuid, 10)
+                            });
+                        });
+                    }
                 });
-            }
-        });
+            })(joinIndex);
+        }
 
         // Rooms I need to leave
         var roomsToLeave = _.difference(roomsCurrentlyIn, roomsToBeIn);
