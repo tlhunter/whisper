@@ -76,7 +76,8 @@ io.sockets.on('connection', function(socket) {
                                 time: result.time,
                                 size: parseInt(result.size, 10),
                                 body: sanitizer.escape(result.message),
-                                uuid: result.uuid
+                                uuid: result.uuid,
+                                area: result.area
                             });
                         });
                     }
@@ -87,8 +88,13 @@ io.sockets.on('connection', function(socket) {
         // Rooms I need to leave
         var roomsToLeave = _.difference(roomsCurrentlyIn, roomsToBeIn);
         for (var leaveIndex in roomsToLeave) {
-            socket.leave(roomsToLeave[leaveIndex]);
-            // TODO Send message to client to delete messages tied to these rooms
+            var roomToLeaveName = roomsToLeave[leaveIndex];
+            socket.leave(roomToLeaveName);
+        }
+        if (roomsToLeave.length) {
+            socket.emit('leave-area', {
+                areas: roomsToLeave
+            });
         }
     });
 
@@ -129,7 +135,8 @@ io.sockets.on('connection', function(socket) {
                 'longitude', coords.longitude,
                 'time', time,
                 'size', size,
-                'uuid', id
+                'uuid', id,
+                'area', roomName
             ],
             function(err) {
                 if (err) {
@@ -147,7 +154,8 @@ io.sockets.on('connection', function(socket) {
                     time: time,
                     size: size,
                     body: sanitizer.escape(body),
-                    uuid: id
+                    uuid: id,
+                    area: roomName
                 });
             }
         );

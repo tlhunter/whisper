@@ -20,12 +20,12 @@ $(function() {
     var displayMessage = function(data) {
         // This probably only works in Chrome...
         var date = new Date(data.time).toLocaleTimeString();
-        $messages.prepend('<div data-uuid="' + data.uuid + '" class="message size-' + data.size + '"><time>' + date + '</time>: ' + data.body + '</div>');
+        $messages.prepend('<div data-uuid="' + data.uuid + '" data-area="' + data.area + '" class="message size-' + data.size + '"><time>' + date + '</time>: ' + data.body + '</div>');
     };
 
     // I received a message from the server
     socket.on('message-to-client', function (data) {
-        console.log(data);
+        console.log('message-to-client', data);
 
         if (uuids.indexOf(data.uuid) >= 0) {
             return;
@@ -33,6 +33,16 @@ $(function() {
         uuids.push(data.uuid);
 
         displayMessage(data);
+    });
+
+    socket.on('leave-area', function(data) {
+        console.log('leave-area', data);
+        for (var index in data.areas) {
+            $('#messages .message[data-area=' + data.areas[index] + ']').each(function() {
+                uuids.splice(uuids.indexOf($(this).attr('data-uuid')), 1);
+                $(this).remove();
+            });
+        }
     });
 
     // OMG ERROR
