@@ -27,6 +27,11 @@ $(function() {
         displayMessage(data);
     });
 
+    // OMG ERROR
+    socket.on('error', function (data) {
+        alert(data.message);
+    });
+
     // One of the size radio buttons were cliced
     $('#size').click(function() {
         var size = $('#size input:checked').val();
