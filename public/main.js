@@ -45,7 +45,7 @@ $(function() {
     var setNewCoordinates = function(pos) {
         var c = pos.coords;
         console.log(c);
-        $data.html("Latitude: " + c.latitude + "<br />Longitude: " + c.longitude + "<br />Accuracy: " + c.accuracy);
+        $data.html("Lat: " + c.latitude + "<br />Lon: " + c.longitude + "<br />Acc: " + c.accuracy + " meters");
         coords = c;
         transmitLocation();
     };
