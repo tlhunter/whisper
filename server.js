@@ -10,7 +10,6 @@ var uuid = require('node-uuid');
 var GEOHASH_ACCURACY = 9;
 var GEOHASH_LEVELS = [ 8, 5, 4, 3, 2 ];
 var EXPIRATION = [
-    -1,     // Error
     172800,  // Level 1 = 48 Hours
     43200,  // Level 2 = 12 Hours
     7200,   // Level 3 = 2 Hours
