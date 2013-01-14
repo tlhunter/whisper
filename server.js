@@ -6,6 +6,7 @@ var geohash = require('ngeohash');
 var _ = require('underscore')._;
 var redis = require('redis').createClient();
 var uuid = require('node-uuid');
+var sanitizer   = require('sanitizer');
 
 var GEOHASH_ACCURACY = 9;
 var GEOHASH_LEVELS = [ 8, 5, 4, 3, 2 ];
@@ -74,7 +75,7 @@ io.sockets.on('connection', function(socket) {
                             socket.emit('message-to-client', {
                                 time: result.time,
                                 size: parseInt(result.size, 10),
-                                body: result.message,
+                                body: sanitizer.escape(result.message),
                                 uuid: result.uuid
                             });
                         });
@@ -145,7 +146,7 @@ io.sockets.on('connection', function(socket) {
                 io.sockets.in(roomName).emit('message-to-client', {
                     time: time,
                     size: size,
-                    body: body,
+                    body: sanitizer.escape(body),
                     uuid: id
                 });
             }
