@@ -7,25 +7,41 @@
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
-        <h1>Whisper</h1>
-        <div id="messages"></div>
-        <div id="map"></div>
-        <form id="compose">
-            <div id="size">
-                Whisper
-                <label class="size-0" for="size-0">48H</label><input id="size-0" type="radio" name="size" value="0" />
-                <label class="size-1" for="size-1">12H</label><input id="size-1" type="radio" name="size" value="1" />
-                <label class="size-2" for="size-2"> 2H</label><input id="size-2" type="radio" name="size" value="2" checked />
-                <label class="size-3" for="size-3">20M</label><input id="size-3" type="radio" name="size" value="3" />
-                <label class="size-4" for="size-4">30S</label><input id="size-4" type="radio" name="size" value="4" />
-                Shout
+        <div id="container">
+            <div id="header">
+                <h1>Whisper</h1>
+                <a id="info" href="#">?</a>
             </div>
-            <div id="message-holder"><textarea class="size-2" id="message" placeholder="Message" maxlength="255"></textarea></div>
-            <div id="actions">
-                <input id="transmit" type="submit" value="Transmit Message" />
+            <div id="messages"></div>
+            <div id="help">
+                <p><strong>Whisper</strong>: A GeoLocation based Communication service.</p>
+                <p>Whisper allows you to broadcast messages from the location you are standing. With these messages, you can specify a loudness. The louder your message, the greater the area it can be read in, and the quicker the message goes away.</p>
+                <p>Want to play a game with your friends? Give them clues and leave small whisper messages directing them to the next location.</p>
+                <p>Messages automatically appear and disappear when you leave a location or the messages get too old.</p>
             </div>
-            <div id="data"></div>
-        </form>
+            <div id="map"></div>
+            <form id="compose">
+                <div id="size">
+                    Whisper
+                    <label class="size-0" for="size-0">48H</label><input id="size-0" type="radio" name="size" value="0" />
+                    <label class="size-1" for="size-1">12H</label><input id="size-1" type="radio" name="size" value="1" />
+                    <label class="size-2" for="size-2"> 2H</label><input id="size-2" type="radio" name="size" value="2" checked />
+                    <label class="size-3" for="size-3">20M</label><input id="size-3" type="radio" name="size" value="3" />
+                    <label class="size-4" for="size-4">30S</label><input id="size-4" type="radio" name="size" value="4" />
+                    Shout
+                </div>
+                <div id="message-holder"><textarea class="size-2" id="message" placeholder="Message" maxlength="255"></textarea></div>
+                <div id="actions">
+                    <input id="transmit" type="submit" value="SEND" />
+                </div>
+                <div id="data">
+                    <div id="latitude" class="datum">Lat: &infinity;</div>
+                    <div id="longitude" class="datum">Lon: &infinity;</div>
+                    <div id="accuracy" class="datum">Acc: &infinity;</div>
+                    <div style="clear:both;"></div>
+                </div>
+            </form>
+        </div>
         <script src="main.js"></script>
     </body>
 </html>

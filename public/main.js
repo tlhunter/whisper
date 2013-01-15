@@ -13,7 +13,9 @@ $(function() {
     var $messageInput = $('#message');
     var $compose = $('form#compose');
     var $enableGeo = $('#enable-geo');
-    var $data = $('#data');
+    var $lat = $('#latitude');
+    var $lon = $('#longitude');
+    var $acc = $('#accuracy');
 
     // If we receive old messages, our list order is now dirty and needs to be reordered.
     // I don't wan't to reorder every time we get a dirty message though since we get groups of them.
@@ -42,7 +44,7 @@ $(function() {
 
     // I received a message from the server
     socket.on('message-to-client', function (data) {
-        console.log('message-to-client', data);
+        //console.log('message-to-client', data);
 
         if (uuids.indexOf(data.uuid) >= 0) {
             return;
@@ -56,7 +58,7 @@ $(function() {
 
     // If we left an area we want to delete the messages associated with it
     socket.on('leave-area', function(data) {
-        console.log('leave-area', data);
+        //console.log('leave-area', data);
         $messages.hide();
         for (var index in data.areas) {
             $('#messages .message[data-area=' + data.areas[index] + ']').each(function() {
@@ -86,8 +88,10 @@ $(function() {
     // Update our coordinates values as well as the GUI
     var setNewCoordinates = function(pos) {
         var c = pos.coords;
-        console.log(c);
-        $data.html("Lat: " + c.latitude + "<br />Lon: " + c.longitude + "<br />Acc: " + c.accuracy + " meters");
+        //console.log(c);
+        $lat.html("Lat: " + c.latitude);
+        $lon.html("Lon: " + c.longitude);
+        $acc.html("Acc: " + c.accuracy + " meters");
         coords = c;
         transmitLocation();
     };
@@ -184,5 +188,10 @@ $(function() {
             body: message,
             coords: coords
         });
+    });
+
+    $('#info').click(function() {
+        $('#help').toggle();
+        $messages.toggle();
     });
 });
