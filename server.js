@@ -48,7 +48,12 @@ io.sockets.on('connection', function(socket) {
         var roomName = '';
         for (var i = 0; i < GEOHASH_LEVELS.length; i++) {
             roomName = hash.substring(0, GEOHASH_LEVELS[i]);
-            roomsToBeIn.push(roomName);
+            for (var adjX = -1; adjX <= 1; adjX++) {
+                for (var adjY = -1; adjY <= 1; adjY++) {
+                    roomsToBeIn.push(geohash.neighbor(roomName, [adjX,adjY]));
+                }
+            }
+
         }
 
         // Rooms I need to join
