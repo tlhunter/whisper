@@ -28,7 +28,8 @@ io.sockets.on('connection', function(socket) {
         time: new Date(),
         size: 5,
         body: "Socket Connection Established",
-        uuid: 0
+        uuid: 0,
+        dirty: false
     });
 
     socket.on('location', function(coords) {
@@ -77,7 +78,8 @@ io.sockets.on('connection', function(socket) {
                                 size: parseInt(result.size, 10),
                                 body: sanitizer.escape(result.message),
                                 uuid: result.uuid,
-                                area: result.area
+                                area: result.area,
+                                dirty: true
                             });
                         });
                     }
@@ -155,7 +157,8 @@ io.sockets.on('connection', function(socket) {
                     size: size,
                     body: sanitizer.escape(body),
                     uuid: id,
-                    area: roomName
+                    area: roomName,
+                    dirty: false
                 });
             }
         );

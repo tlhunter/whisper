@@ -15,6 +15,10 @@ $(function() {
     var $enableGeo = $('#enable-geo');
     var $data = $('#data');
 
+    // If we receive old messages, our list order is now dirty and needs to be reordered.
+    // I don't wan't to reorder every time we get a dirty message though since we get groups of them.
+    var dirty = true;
+
     var uuids = [];
 
     // To help debug stuff
@@ -33,7 +37,7 @@ $(function() {
     var displayMessage = function(data) {
         // This probably only works in Chrome...
         var date = new Date(data.time).toLocaleTimeString();
-        $messages.prepend('<div data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + data.time + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time>' + date + '</time>: ' + data.body + '</div>');
+        $messages.prepend('<div id="msg-' + data.uuid + '" data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + data.time + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time>' + date + '</time>: ' + data.body + '</div>');
     };
 
     // I received a message from the server
@@ -44,6 +48,8 @@ $(function() {
             return;
         }
         uuids.push(data.uuid);
+
+        if (data.dirty) dirty = true;
 
         displayMessage(data);
     });
@@ -115,11 +121,34 @@ $(function() {
         $messages.show();
     };
 
+    // Check the dirty bit. If we're dirty, time to get clean.
+    var reorderMessages = function() {
+        if (!dirty) return;
+        $messages.hide();
+
+        uuids.sort();
+        uuids.reverse();
+
+        for (var index in uuids) {
+            $messages.append($('#msg-' + uuids[index]));
+        }
+
+        $messages.show();
+        dirty = false;
+    };
+
+    window.triggerDirty = function() {
+        dirty = true;
+        reorderMessages();
+    };
+
     setInterval(initiateGeoLocation, 29*1000);
     setInterval(removeOldMessages, 61*1000);
+    setInterval(reorderMessages, 1*1000); // Is this going to be a CPU hog? most of the time it's a quick if statement and a return.
 
     initiateGeoLocation();
 
+    // Grabbing onto the form submit for handling an update. Could listen to enter or something I suppose...
     $compose.submit(function(event) {
         event.preventDefault();
         initiateGeoLocation();
