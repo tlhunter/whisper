@@ -89,9 +89,9 @@ $(function() {
     var setNewCoordinates = function(pos) {
         var c = pos.coords;
         //console.log(c);
-        $lat.html("Lat: " + c.latitude);
-        $lon.html("Lon: " + c.longitude);
-        $acc.html("Acc: " + c.accuracy + " meters");
+        $lat.html("Lat: " + Math.floor(c.latitude*10000000)/10000000);
+        $lon.html("Lon: " + Math.floor(c.longitude*10000000)/10000000);
+        $acc.html("Acc: " + Math.floor(c.accuracy*100)/100 + " meters");
         coords = c;
         transmitLocation();
     };
