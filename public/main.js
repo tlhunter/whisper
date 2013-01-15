@@ -1,4 +1,12 @@
 $(function() {
+    var EXPIRATION = [
+        172800, // Level 1 = 48 Hours
+        43200,  // Level 2 = 12 Hours
+        7200,   // Level 3 = 2 Hours
+        1200,   // Level 4 = 20 Minutes
+        30      // Level 5 = 30 Seconds
+    ];
+
     // DOM Queries
     var socket = io.connect();
     var $messages = $('#messages');
@@ -8,6 +16,11 @@ $(function() {
     var $data = $('#data');
 
     var uuids = [];
+
+    // To help debug stuff
+    window.uuids = function() {
+        console.log(uuids);
+    };
 
     // My last known location
     var coords = {
@@ -20,7 +33,7 @@ $(function() {
     var displayMessage = function(data) {
         // This probably only works in Chrome...
         var date = new Date(data.time).toLocaleTimeString();
-        $messages.prepend('<div data-uuid="' + data.uuid + '" data-area="' + data.area + '" class="message size-' + data.size + '"><time>' + date + '</time>: ' + data.body + '</div>');
+        $messages.prepend('<div data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + data.time + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time>' + date + '</time>: ' + data.body + '</div>');
     };
 
     // I received a message from the server
@@ -35,6 +48,7 @@ $(function() {
         displayMessage(data);
     });
 
+    // If we left an area we want to delete the messages associated with it
     socket.on('leave-area', function(data) {
         console.log('leave-area', data);
         $messages.hide();
@@ -58,10 +72,12 @@ $(function() {
         $messageInput.removeClass().addClass('size-'+size);
     });
 
+    // Simply transmit our current location
     var transmitLocation = function() {
         socket.emit('location', coords);
     };
 
+    // Update our coordinates values as well as the GUI
     var setNewCoordinates = function(pos) {
         var c = pos.coords;
         console.log(c);
@@ -70,11 +86,37 @@ $(function() {
         transmitLocation();
     };
 
+    // prompt the user for their location, or if permission was granted, get their location
     var initiateGeoLocation = function() {
         navigator.geolocation.getCurrentPosition(setNewCoordinates);
     };
 
-    setInterval(initiateGeoLocation, 30*1000);
+    // Check message timestamps, if they should have expired, remove them (and their no-longer-needed uuid)
+    var removeOldMessages = function() {
+        $messages.hide();
+        // Querying the dom like this is slow and dumb. Should maintian a big array (e.g. the uuid array)
+
+        var now = new Date();
+        var $element = null;
+        var time = null;
+        var expire = null;
+        $('#messages .message').each(function() {
+            $element = $(this);
+            time = new Date($element.attr('data-time'));
+            if (!time) return;
+            expire = EXPIRATION[$element.attr('data-size')];
+            if (!expire) return;
+            if (now - time > expire * 1000) {
+                $element.remove();
+                uuids.splice(uuids.indexOf($element.attr('data-uuid')), 1);
+            }
+        });
+
+        $messages.show();
+    };
+
+    setInterval(initiateGeoLocation, 29*1000);
+    setInterval(removeOldMessages, 61*1000);
 
     initiateGeoLocation();
 
