@@ -98,7 +98,7 @@ $(function() {
 
     // prompt the user for their location, or if permission was granted, get their location
     var initiateGeoLocation = function() {
-        navigator.geolocation.getCurrentPosition(setNewCoordinates);
+        navigator.geolocation.getCurrentPosition(setNewCoordinates, null, {enableHighAccuracy: true});
     };
 
     // Check message timestamps, if they should have expired, remove them (and their no-longer-needed uuid)
