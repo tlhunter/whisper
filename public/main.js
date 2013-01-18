@@ -1,12 +1,12 @@
 $(function() {
-    var EXPIRATION = [
-        172800, // Level 1 = 48 Hours
-        43200,  // Level 2 = 12 Hours
-        7200,   // Level 3 = 2 Hours
-        1200,   // Level 4 = 20 Minutes
-        30      // Level 5 = 30 Seconds
-    ];
+	$.ajax({
+		dataType: "json",
+		url: "/shared-data.json",
+		success: go
+	});
+});
 
+function go(config) {
     // DOM Queries
     var socket = io.connect();
     var $messages = $('#messages');
@@ -112,10 +112,16 @@ $(function() {
         var expire = null;
         $('#messages .message').each(function() {
             $element = $(this);
+
             time = new Date($element.attr('data-time'));
             if (!time) return;
-            expire = EXPIRATION[$element.attr('data-size')];
+
+			var size = parseInt($element.attr('data-size'), 10);
+			if (size >= config.levels.length) return;
+
+            expire = config.levels[size].expiration;
             if (!expire) return;
+
             if (now - time > expire * 1000) {
                 $element.remove();
                 uuids.splice(uuids.indexOf($element.attr('data-uuid')), 1);
@@ -146,8 +152,8 @@ $(function() {
         reorderMessages();
     };
 
-    setInterval(initiateGeoLocation, 29*1000);
-    setInterval(removeOldMessages, 61*1000);
+    setInterval(initiateGeoLocation, 17*1000);
+    setInterval(removeOldMessages, 11*1000);
     setInterval(reorderMessages, 1*1000); // Is this going to be a CPU hog? most of the time it's a quick if statement and a return.
 
     initiateGeoLocation();
@@ -192,6 +198,5 @@ $(function() {
 
     $('#info').click(function() {
         $('#help').toggle();
-        $messages.toggle();
     });
-});
+}

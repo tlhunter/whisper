@@ -32,6 +32,9 @@ a {
     font-size: 32px;
     font-weight: bold;
 }
+#message-help-holder {
+	position: relative;
+}
 #help,
 #messages {
     height: 300px;
@@ -43,6 +46,12 @@ a {
     display: none;
     background-color: #fff;
     color: #000;
+	top: 0;
+	left: 0;
+	position: absolute;
+}
+#help p {
+	margin: 0 0 10px 0;
 }
 #messages .time {
 }

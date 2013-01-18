@@ -8,15 +8,7 @@ var redis = require('redis').createClient();
 var uuid = require('node-uuid');
 var sanitizer   = require('sanitizer');
 
-var GEOHASH_ACCURACY = 9;
-var GEOHASH_LEVELS = [ 8, 5, 4, 3, 2 ];
-var EXPIRATION = [
-    172800, // Level 1 = 48 Hours
-    43200,  // Level 2 = 12 Hours
-    7200,   // Level 3 = 2 Hours
-    1200,   // Level 4 = 20 Minutes
-    30      // Level 5 = 30 Seconds
-];
+var config = require('./public/shared-data.json');
 
 // I really shouldn't be using express.js for this...
 web.use('/', express.static(__dirname + '/public'));
@@ -33,7 +25,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('location', function(coords) {
-        var hash = geohash.encode(coords.latitude, coords.longitude, GEOHASH_ACCURACY);
+        var hash = geohash.encode(coords.latitude, coords.longitude);
 
         // This is a list of all the rooms I should be in based on my geo hash
         var roomsToBeIn = [];
@@ -46,8 +38,8 @@ io.sockets.on('connection', function(socket) {
         }
 
         var roomName = '';
-        for (var i = 0; i < GEOHASH_LEVELS.length; i++) {
-            roomName = hash.substring(0, GEOHASH_LEVELS[i]);
+        for (var i = 0; i < config.levels.length; i++) {
+            roomName = hash.substring(0, config.levels[i].hash_accuracy);
             for (var adjX = -1; adjX <= 1; adjX++) {
                 for (var adjY = -1; adjY <= 1; adjY++) {
                     roomsToBeIn.push(geohash.neighbor(roomName, [adjX,adjY]));
@@ -131,8 +123,8 @@ io.sockets.on('connection', function(socket) {
         var id = uuid.v1();
 
         // Determine the specificity we need
-        var hash = geohash.encode(coords.latitude, coords.longitude, GEOHASH_ACCURACY);
-        var roomName = hash.substring(0, GEOHASH_LEVELS[size]);
+        var hash = geohash.encode(coords.latitude, coords.longitude);
+        var roomName = hash.substring(0, config.levels[size].hash_accuracy);
 
         redis.hmset([
                 'msg:'+roomName+'-'+id,
@@ -154,7 +146,7 @@ io.sockets.on('connection', function(socket) {
                     return;
                 }
 
-                redis.expire('msg:'+roomName+'-'+id, EXPIRATION[size]);
+                redis.expire('msg:'+roomName+'-'+id, config.levels[size].expiration);
 
                 // Send message
                 io.sockets.in(roomName).emit('message-to-client', {

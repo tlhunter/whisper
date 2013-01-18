@@ -1,0 +1,40 @@
+{
+	"geohash_accuracy": 9,
+	"levels": [
+		{
+			"name": "Whisper",
+			"label": "48H",
+			"description": "48 Hours, long duration, short range (maybe a few dozen feet)",
+			"hash_accuracy": 8,
+			"expiration": 172800
+		},
+		{
+			"name": "Murmer",
+			"label": "12H",
+			"description": "12 Hours",
+			"hash_accuracy": 5,
+			"expiration": 43200
+		},
+		{
+			"name": "Speak",
+			"label": "2H",
+			"description": "2 Hours",
+			"hash_accuracy": 4,
+			"expiration": 7200
+		},
+		{
+			"name": "Yell",
+			"label": "20M",
+			"description": "20 Minutes",
+			"hash_accuracy": 3,
+			"expiration": 1200
+		},
+		{
+			"name": "Shout",
+			"label": "30S",
+			"description": "30 Seonds, short duration, long range (maybe a hundred miles)",
+			"hash_accuracy": 2,
+			"expiration": 30
+		}
+	]
+}
