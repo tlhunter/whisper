@@ -5,7 +5,6 @@ var io = require('socket.io').listen(server);
 var geohash = require('ngeohash');
 var _ = require('underscore')._;
 var redis = require('redis').createClient();
-var uuid = require('node-uuid');
 var sanitizer   = require('sanitizer');
 
 var config = require('./public/shared-data.json');
@@ -15,12 +14,16 @@ web.use('/', express.static(__dirname + '/public'));
 
 server.listen(80);
 
+var getUniqueID = function() {
+    return new Date().getTime() + "";
+}
+
 io.sockets.on('connection', function(socket) {
     socket.emit('message-to-client', {
         time: new Date(),
         size: 5,
         body: "Socket Connection Established",
-        uuid: 0,
+        uuid: getUniqueID(),
         dirty: false
     });
 
@@ -120,7 +123,7 @@ io.sockets.on('connection', function(socket) {
             return;
         }
 
-        var id = uuid.v1();
+        var id = getUniqueID();
 
         // Determine the specificity we need
         var hash = geohash.encode(coords.latitude, coords.longitude);
