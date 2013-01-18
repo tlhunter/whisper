@@ -1,9 +1,9 @@
 $(function() {
-	$.ajax({
-		dataType: "json",
-		url: "/shared-data.json",
-		success: go
-	});
+    $.ajax({
+        dataType: "json",
+        url: "/shared-data.json",
+        success: go
+    });
 });
 
 function go(config) {
@@ -98,7 +98,10 @@ function go(config) {
 
     // prompt the user for their location, or if permission was granted, get their location
     var initiateGeoLocation = function() {
-        navigator.geolocation.getCurrentPosition(setNewCoordinates, null, {enableHighAccuracy: true});
+        navigator.geolocation.getCurrentPosition(setNewCoordinates, null, {
+            enableHighAccuracy: true,
+            maximumAge: 0
+        });
     };
 
     // Check message timestamps, if they should have expired, remove them (and their no-longer-needed uuid)
@@ -116,8 +119,8 @@ function go(config) {
             time = new Date($element.attr('data-time'));
             if (!time) return;
 
-			var size = parseInt($element.attr('data-size'), 10);
-			if (size >= config.levels.length) return;
+            var size = parseInt($element.attr('data-size'), 10);
+            if (size >= config.levels.length) return;
 
             expire = config.levels[size].expiration;
             if (!expire) return;
