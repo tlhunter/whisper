@@ -199,6 +199,11 @@ function go(config) {
         });
     });
 
+    $('#refresh').click(function() {
+        initiateGeoLocation();
+        dirty = true;
+    });
+
     $('#info').click(function() {
         $('#help').toggle();
     });
