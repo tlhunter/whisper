@@ -17,6 +17,13 @@ function go(config) {
     var $lon = $('#longitude');
     var $acc = $('#accuracy');
 
+	// Update DOM Labels
+	for (var i = 0; i < 5; i++) {
+		$('#size-' + i + '-label')
+			.text(config.levels[i].label)
+			.attr('title', config.levels[i].description);
+	}
+
     // If we receive old messages, our list order is now dirty and needs to be reordered.
     // I don't wan't to reorder every time we get a dirty message though since we get groups of them.
     var dirty = true;

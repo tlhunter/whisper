@@ -2,38 +2,38 @@
 	"levels": [
 		{
 			"name": "Whisper",
-			"label": "48H",
-			"description": "48 Hours, long duration, short range (maybe a few dozen feet)",
+			"label": "1W",
+			"description": "1 Week, long duration, short range (maybe a few dozen feet)",
 			"hash_accuracy": 8,
-			"expiration": 172800
+			"expiration": 604800
 		},
 		{
 			"name": "Murmer",
-			"label": "12H",
-			"description": "12 Hours",
+			"label": "2D",
+			"description": "2 Days",
 			"hash_accuracy": 5,
-			"expiration": 43200
+			"expiration": 172800
 		},
 		{
 			"name": "Speak",
-			"label": "2H",
-			"description": "2 Hours",
+			"label": "12H",
+			"description": "12 Hours",
 			"hash_accuracy": 4,
-			"expiration": 7200
+			"expiration": 43200
 		},
 		{
 			"name": "Yell",
-			"label": "20M",
-			"description": "20 Minutes",
+			"label": "2H",
+			"description": "2 Hours",
 			"hash_accuracy": 3,
-			"expiration": 1200
+			"expiration": 7200
 		},
 		{
 			"name": "Shout",
-			"label": "30S",
-			"description": "30 Seonds, short duration, long range (maybe a hundred miles)",
+			"label": "5M",
+			"description": "5 Minutes, short duration, long range (maybe a hundred miles)",
 			"hash_accuracy": 2,
-			"expiration": 30
+			"expiration": 300
 		}
 	]
 }
