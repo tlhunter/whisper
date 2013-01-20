@@ -109,3 +109,12 @@ a {
 #size label {
     margin-left: 20px;
 }
+footer {
+	text-align: center;
+	font-size: 14px;
+	color: #999;
+	margin-bottom: 10px;
+}
+footer a {
+	color: #99a;
+}
