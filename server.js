@@ -12,8 +12,10 @@ var config = require('./public/shared-data.json');
 // I really shouldn't be using express.js for this...
 web.use('/', express.static(__dirname + '/public'));
 
-server.listen(80);
+// Port number is either the first argument or 80
+server.listen(parseInt(process.argv[2], 10) || 80);
 
+// Returns a unique ID. Each time it's run, you should get a number bigger than the last
 var getUniqueID = function() {
     return new Date().getTime() + "";
 }
@@ -27,6 +29,7 @@ io.sockets.on('connection', function(socket) {
         dirty: false
     });
 
+	// Client sent us an updated location
     socket.on('location', function(coords) {
         var hash = geohash.encode(coords.latitude, coords.longitude);
 
@@ -43,6 +46,8 @@ io.sockets.on('connection', function(socket) {
         var roomName = '';
         for (var i = 0; i < config.levels.length; i++) {
             roomName = hash.substring(0, config.levels[i].hash_accuracy);
+
+			// Here we join a 3x3 matrix of locations. Two people could be a few meteres apart and in two different squares, so this fixes that
             for (var adjX = -1; adjX <= 1; adjX++) {
                 for (var adjY = -1; adjY <= 1; adjY++) {
                     roomsToBeIn.push(geohash.neighbor(roomName, [adjX,adjY]));
@@ -54,7 +59,6 @@ io.sockets.on('connection', function(socket) {
         // Rooms I need to join
         var roomsToJoin = _.difference(roomsToBeIn, roomsCurrentlyIn);
         for (var joinIndex in roomsToJoin) {
-            // hey look, I'm javascript, who needs scoping outside of function blocks herp derp
             (function(joinIndex) {
                 var thisRoom = roomsToJoin[joinIndex];
                 socket.join(thisRoom);
@@ -100,6 +104,7 @@ io.sockets.on('connection', function(socket) {
         }
     });
 
+	// The client is sending out a message to other clients
     socket.on('message-to-server', function(data) {
         var size = parseInt(data.size, 10);
         var time = new Date();
@@ -129,6 +134,7 @@ io.sockets.on('connection', function(socket) {
         var hash = geohash.encode(coords.latitude, coords.longitude);
         var roomName = hash.substring(0, config.levels[size].hash_accuracy);
 
+		// Persist this message in Redis
         redis.hmset([
                 'msg:'+roomName+'-'+id,
                 'geohash', hash,
@@ -151,7 +157,7 @@ io.sockets.on('connection', function(socket) {
 
                 redis.expire('msg:'+roomName+'-'+id, config.levels[size].expiration);
 
-                // Send message
+                // Send message to client
                 io.sockets.in(roomName).emit('message-to-client', {
                     time: time,
                     size: size,
