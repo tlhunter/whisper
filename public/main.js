@@ -44,8 +44,10 @@ function go(config) {
 
     // Display a message in the DOM
     var displayMessage = function(data) {
-        var date = moment(data.time).format('MMM D, H:mm:ss');
-        $messages.prepend('<div id="msg-' + data.uuid + '" data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + date + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time style="color: #' + data.color + '">' + date + '</time>: ' + data.body + '</div>');
+        var date = moment(data.time)
+		var date_big = date.format('YYYY MMMM D');
+		var date_small = date.format('H:mm:ss');
+        $messages.prepend('<div style="color: #' + data.color + '" id="msg-' + data.uuid + '" data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + date + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time>' + date_small + '<span>' + date_big + '</span></time><br />' + data.body + '</div>');
     };
 
     // I received a message from the server
@@ -83,7 +85,7 @@ function go(config) {
     // One of the size radio buttons were cliced
     $('#size').click(function() {
         var size = $('#size input:checked').val();
-        $messageInput.removeClass().addClass('size-'+size);
+        //$messageInput.removeClass().addClass('size-'+size);
     });
 
     // Simply transmit our current location

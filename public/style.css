@@ -42,6 +42,22 @@ a {
     border: 1px solid #666;
     position: relative;
 }
+#messages .message {
+	background-repeat: no-repeat;
+	background: position: left middle;
+	padding-left: 28px;
+}
+#messages .message time {
+	min-height: 24px;
+	line-height: 24px;
+	font-weight: bold;
+	color: white;
+}
+#messages .message time span {
+	float: right;
+	font-weight: normal;
+	padding-right: 10px;
+}
 #help {
     display: none;
     background-color: #fff;
@@ -53,14 +69,12 @@ a {
 #help p {
 	margin: 0 0 10px 0;
 }
-#messages .time {
-}
-.size-0 { color: #ff9900 !important; } /* WHISPER */
-.size-1 { color: #ddff00 !important; }
-.size-2 { color: #00ff66 !important; }
-.size-3 { color: #00ffff !important; }
-.size-4 { color: #0099ff !important; } /* SHOUT */
-.size-5 { color: #ff0000 !important; } /* ERROR */
+.message.size-0 { background-image: url('level-0.png'); } /* WHISPER */
+.message.size-1 { background-image: url('level-1.png'); }
+.message.size-2 { background-image: url('level-2.png'); }
+.message.size-3 { background-image: url('level-3.png'); }
+.message.size-4 { background-image: url('level-4.png'); } /* SHOUT */
+.message.size-5 { background-image: url('level-0.png'); } /* ERROR */
 #map {
     height: 0px;
 }
