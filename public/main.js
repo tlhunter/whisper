@@ -44,9 +44,8 @@ function go(config) {
 
     // Display a message in the DOM
     var displayMessage = function(data) {
-        // This probably only works in Chrome...
-        var date = new Date(data.time).toLocaleTimeString();
-        $messages.prepend('<div id="msg-' + data.uuid + '" data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + data.time + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time style="color: #' + data.color + '">' + date + '</time>: ' + data.body + '</div>');
+        var date = moment(data.time).format('MMM D, H:mm:ss');
+        $messages.prepend('<div id="msg-' + data.uuid + '" data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + date + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time style="color: #' + data.color + '">' + date + '</time>: ' + data.body + '</div>');
     };
 
     // I received a message from the server
@@ -123,7 +122,7 @@ function go(config) {
         $('#messages .message').each(function() {
             $element = $(this);
 
-            time = new Date($element.attr('data-time'));
+            time = new moment().format($element.attr('data-time')).d;
             if (!time) return;
 
             var size = parseInt($element.attr('data-size'), 10);

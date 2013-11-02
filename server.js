@@ -7,6 +7,7 @@ var _ 				= require('underscore')._;
 var redis 			= require('redis').createClient();
 var sanitizer	 	= require('sanitizer');
 var crypto			= require('crypto');
+var moment			= require('moment');
 
 var config = require('./public/shared-data.json');
 
@@ -23,10 +24,11 @@ var getUniqueID = function() {
 
 io.sockets.on('connection', function(socket) {
     socket.emit('message-to-client', {
-        time: new Date(),
+        time: moment().format(),
         size: 5,
         body: "Socket Connection Established",
         uuid: getUniqueID(),
+		color: 'FFFFFF',
         dirty: false
     });
 
@@ -109,7 +111,7 @@ io.sockets.on('connection', function(socket) {
 	// The client is sending out a message to other clients
     socket.on('message-to-server', function(data) {
         var size = parseInt(data.size, 10);
-        var time = new Date();
+        var time = moment().format();
         var body = data.body.substring(0, 255);
         var coords = data.coords;
 
