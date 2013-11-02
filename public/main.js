@@ -46,7 +46,7 @@ function go(config) {
     var displayMessage = function(data) {
         // This probably only works in Chrome...
         var date = new Date(data.time).toLocaleTimeString();
-        $messages.prepend('<div id="msg-' + data.uuid + '" data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + data.time + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time>' + date + '</time>: ' + data.body + '</div>');
+        $messages.prepend('<div id="msg-' + data.uuid + '" data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + data.time + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time style="color: #' + data.color + '">' + date + '</time>: ' + data.body + '</div>');
     };
 
     // I received a message from the server

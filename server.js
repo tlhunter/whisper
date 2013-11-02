@@ -1,11 +1,12 @@
-var express = require('express');
-var web = express();
-var server = require('http').createServer(web);
-var io = require('socket.io').listen(server);
-var geohash = require('ngeohash');
-var _ = require('underscore')._;
-var redis = require('redis').createClient();
-var sanitizer   = require('sanitizer');
+var express 		= require('express');
+var web 			= express();
+var server 			= require('http').createServer(web);
+var io 				= require('socket.io').listen(server);
+var geohash 		= require('ngeohash');
+var _ 				= require('underscore')._;
+var redis 			= require('redis').createClient();
+var sanitizer	 	= require('sanitizer');
+var crypto			= require('crypto');
 
 var config = require('./public/shared-data.json');
 
@@ -83,6 +84,7 @@ io.sockets.on('connection', function(socket) {
                                 body: sanitizer.escape(result.message),
                                 uuid: result.uuid,
                                 area: result.area,
+                                color: result.color,
                                 dirty: true
                             });
                         });
@@ -110,6 +112,9 @@ io.sockets.on('connection', function(socket) {
         var time = new Date();
         var body = data.body.substring(0, 255);
         var coords = data.coords;
+
+		// TODO: Need a faster way to do this (e.g. no crypto or md5)
+		var color = crypto.createHash('md5').update(socket.store.id).digest('hex').substr(10,6);
 
         // Validations
         if (size < 0 || size > 4) {
@@ -144,7 +149,8 @@ io.sockets.on('connection', function(socket) {
                 'time', time,
                 'size', size,
                 'uuid', id,
-                'area', roomName
+                'area', roomName,
+				'color', color
             ],
             function(err) {
                 if (err) {
@@ -164,6 +170,7 @@ io.sockets.on('connection', function(socket) {
                     body: sanitizer.escape(body),
                     uuid: id,
                     area: roomName,
+					color: color,
                     dirty: false
                 });
             }
