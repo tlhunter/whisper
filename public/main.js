@@ -17,6 +17,8 @@ function go(config) {
     var $lon = $('#longitude');
     var $acc = $('#accuracy');
 
+	$messageInput.focus();
+
 	// Update DOM Labels
 	for (var i = 0; i < 5; i++) {
 		$('#size-' + i + '-label span')
