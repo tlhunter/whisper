@@ -19,7 +19,7 @@ function go(config) {
 
 	// Update DOM Labels
 	for (var i = 0; i < 5; i++) {
-		$('#size-' + i + '-label')
+		$('#size-' + i + '-label span')
 			.text(config.levels[i].label)
 			.attr('title', config.levels[i].description);
 	}

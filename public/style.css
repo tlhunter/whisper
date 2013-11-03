@@ -7,7 +7,7 @@ body {
 a {
     color: #006fff;
 }
-#container {
+/*#container {
     width: 600px;
     margin: 20px auto;
     background-color: #111;
@@ -15,7 +15,7 @@ a {
     padding: 20px;
     box-shadow:0px 0px 45px #27426e;
     border: 1px solid #333;
-}
+}*/
 #header {
     height: 52px;
     font-family: arial;
@@ -39,7 +39,7 @@ a {
 #messages {
     height: 300px;
     overflow: auto;
-    border: 1px solid #666;
+    /*border: 1px solid #666;*/
     position: relative;
 }
 #messages .message {
@@ -84,7 +84,6 @@ a {
     text-align: right;
 }
 #message {
-    height: 80px;
     width: 100%;
     box-sizing: border-box;
     background-color: #000;
@@ -109,7 +108,7 @@ a {
 #messages,
 #data,
 #message {
-    font-family: Monaco, Menlo, Consolas, Courier;
+    font-family: monospace, Monaco, Menlo, Consolas, Courier;
     font-size: 11px;
 }
 #size {
@@ -117,17 +116,29 @@ a {
     text-align: center;
     font-weight: bold;
 }
-#size input {
-    margin-right: 20px;
-}
 #size label {
-    margin-left: 20px;
+	margin: 0 5px;
+	border: 1px solid white;
+	padding: 4px;
+	border-radius: 3px;
+	display: inline-block;
+	cursor: pointer;
+}
+#size label:hover {
+	background-color: #333;
+}
+#size label img {
+	margin-right: 4px;
+}
+#size label img,
+#size input {
+	vertical-align: middle;
 }
 footer {
 	text-align: center;
 	font-size: 14px;
 	color: #999;
-	margin-bottom: 10px;
+	margin: 10px 0;
 }
 footer a {
 	color: #99a;
