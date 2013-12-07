@@ -29,7 +29,6 @@ io.sockets.on('connection', function(socket) {
         body: "Socket Connection Established",
         uuid: getUniqueID(),
         color: 'FFFFFF',
-        dirty: false
     });
 
     // Client sent us an updated location
@@ -87,7 +86,6 @@ io.sockets.on('connection', function(socket) {
                                 uuid: result.uuid,
                                 area: result.area,
                                 color: result.color,
-                                dirty: true
                             });
                         });
                     }
@@ -173,7 +171,6 @@ io.sockets.on('connection', function(socket) {
                     uuid: id,
                     area: roomName,
                     color: color,
-                    dirty: false
                 });
             }
         );
