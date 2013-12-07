@@ -1,145 +1,42 @@
-body {
-    font-size: 12px;
-    font-family: arial;
-    color: #fff;
-    background-color: #000;
-}
-a {
-    color: #006fff;
-}
-/*#container {
-    width: 600px;
-    margin: 20px auto;
-    background-color: #111;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow:0px 0px 45px #27426e;
-    border: 1px solid #333;
-}*/
-#header {
-    height: 52px;
-    font-family: arial;
-}
-#header h1 {
-    margin: 0;
-    color: #ccc;
-    float: left;
-    font-size: 32px;
-}
-#header #info {
-    float: right;
-    text-decoration: none;
-    font-size: 32px;
-    font-weight: bold;
-}
-#message-help-holder {
-	position: relative;
-}
-#help,
-#messages {
-    height: 300px;
-    overflow: auto;
-    /*border: 1px solid #666;*/
-    position: relative;
-}
-#messages .message {
-	background-repeat: no-repeat;
-	background: position: left middle;
-	padding-left: 28px;
-}
-#messages .message time {
-	min-height: 24px;
-	line-height: 24px;
+#info {
+	font-size: 50px;
 	font-weight: bold;
-	color: white;
-}
-#messages .message time span {
-	float: right;
-	font-weight: normal;
-	padding-right: 10px;
-}
-#help {
-    display: none;
-    background-color: #fff;
-    color: #000;
-	top: 0;
-	left: 0;
-	position: absolute;
-}
-#help p {
-	margin: 0 0 10px 0;
-}
-.message.size-0 { background-image: url('level-0.png'); } /* WHISPER */
-.message.size-1 { background-image: url('level-1.png'); }
-.message.size-2 { background-image: url('level-2.png'); }
-.message.size-3 { background-image: url('level-3.png'); }
-.message.size-4 { background-image: url('level-4.png'); } /* SHOUT */
-.message.size-5 { background-image: url('level-0.png'); } /* ERROR */
-#map {
-    height: 0px;
-}
-#compose {
-}
-#actions {
-    text-align: right;
-}
-#message {
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #000;
-    border: 1px solid #666;
-    color: #fff;
-}
-#data {
-    margin-top: 10px;
-    color: #fff;
-}
-#data .datum {
-    width: 32%;
-    float: left;
-    text-align: center;
-}
-#help,
-#messages,
-#message {
-    padding: 4px;
-}
-#help,
-#messages,
-#data,
-#message {
-    font-family: monospace, Monaco, Menlo, Consolas, Courier;
-    font-size: 11px;
 }
 #size {
-    margin: 10px 0;
-    text-align: center;
-    font-weight: bold;
+	margin-bottom: 100px;
+	width: 631px;
+	margin: 0 auto;
 }
-#size label {
-	margin: 0 5px;
-	border: 1px solid white;
-	padding: 4px;
-	border-radius: 3px;
-	display: inline-block;
-	cursor: pointer;
+#actions {
+	float: right;
+	margin-top: 25px;
 }
-#size label:hover {
-	background-color: #333;
+#size > span {
+	float: left;
+	position: relative;
+	top: 34px;
+	margin: 0 25px;
+	padding: 7px;
 }
-#size label img {
-	margin-right: 4px;
+#message-holder input {
+	width: 100%;
+	border-radius: 5px;
+	height: 40px;
+	border: 1px solid #EEE;
+	text-indent: 15px;
 }
-#size label img,
-#size input {
-	vertical-align: middle;
+#size ul {
+	float: left;
 }
-footer {
+.modal-header .close {
+	color: #FFF;
+}
+.ta-right {
+	text-align: right;
+}
+.footer {
 	text-align: center;
-	font-size: 14px;
-	color: #999;
-	margin: 10px 0;
 }
-footer a {
-	color: #99a;
+#latitude, #longitude, #accuracy {
+	text-align: center;
 }

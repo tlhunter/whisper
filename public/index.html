@@ -2,51 +2,87 @@
 <html>
     <head>
         <title>Whisper</title>
+        <link rel="stylesheet" type="text/css" href="bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="style.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="/bootstrap.js"></script>
         <script src="/moment.js"></script>
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
-        <div id="container">
-            <div id="header">
-                <h1>Whisper</h1>
-                <a id="info" href="#">?</a>
+        <div class="container">
+            <div class="row" id="header">
+                <div class="col-md-10">
+                    <h1>Whisper</h1>
+                </div>
+                <div class="col-md-2 ta-right">
+                    <a id="info" href="#" data-toggle="modal" data-target="#myModal">?</a>
+                </div>
             </div>
-			<div id="message-help-holder">
-	            <div id="messages"></div>
-	            <div id="help">
-	                <p><strong>Whisper</strong>: A GeoLocation based Communication service.</p>
-	                <p>Whisper allows you to broadcast messages from the location you are standing. With these messages, you can specify a loudness. The louder your message, the greater the area it can be read in, and the quicker the message goes away.</p>
-	                <p>Want to play a game with your friends? Give them clues and leave small whisper messages directing them to the next location.</p>
-	                <p>Messages automatically appear and disappear when you leave a location or the messages get too old.</p>
-	            </div>
-			</div>
+            <div class="well">
+                <div id="messages"></div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">About Whisper</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="well" id="message-help-holder">
+                        <p><strong>Whisper</strong>: A GeoLocation based Communication service.</p>
+                        <p>Whisper allows you to broadcast messages from the location you are standing. With these messages, you can specify a loudness. The louder your message, the greater the area it can be read in, and the quicker the message goes away.</p>
+                        <p>Want to play a game with your friends? Give them clues and leave small whisper messages directing them to the next location.</p>
+                        <p>Messages automatically appear and disappear when you leave a location or the messages get too old.</p>
+                    </div>
+                    </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Got it!</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
             <div id="map"></div>
             <form id="compose">
                 <div id="size">
-                    &laquo; Whisper
-					<label id="size-0-label" class="size-0" for="size-0"><img src="level-0.png" /><span>0S</span><input id="size-0" type="radio" name="size" value="0" /></label>
-					<label id="size-1-label" class="size-1" for="size-1"><img src="level-1.png" /><span>0S</span><input id="size-1" type="radio" name="size" value="1" /></label>
-					<label id="size-2-label" class="size-2" for="size-2"><img src="level-2.png" /><span>0S</span><input id="size-2" type="radio" name="size" value="2" checked /></label>
-					<label id="size-3-label" class="size-3" for="size-3"><img src="level-3.png" /><span>0S</span><input id="size-3" type="radio" name="size" value="3" /></label>
-					<label id="size-4-label" class="size-4" for="size-4"><img src="level-4.png" /><span>0S</span><input id="size-4" type="radio" name="size" value="4" /></label>
-                    Shout &raquo;
+                    <span class="left label label-primary">&laquo; Whisper</span>
+                        <ul class="pagination">
+        					<li><a href="#"><label id="size-0-label" class="size-0" for="size-0"><img src="level-0.png" /><span>0S</span><input id="size-0" type="radio" name="size" value="0" /></label></a></li>
+        					<li><a href="#"><label id="size-1-label" class="size-1" for="size-1"><img src="level-1.png" /><span>0S</span><input id="size-1" type="radio" name="size" value="1" /></label></a></li>
+        					<li><a href="#"><label id="size-2-label" class="size-2" for="size-2"><img src="level-2.png" /><span>0S</span><input id="size-2" type="radio" name="size" value="2" checked /></label></a></li>
+        					<li><a href="#"><label id="size-3-label" class="size-3" for="size-3"><img src="level-3.png" /><span>0S</span><input id="size-3" type="radio" name="size" value="3" /></label></a></li>
+        					<li><a href="#"><label id="size-4-label" class="size-4" for="size-4"><img src="level-4.png" /><span>0S</span><input id="size-4" type="radio" name="size" value="4" /></label></a></li>
+                        </ul>
+                  <span class="label label-danger">Shout &raquo;</span>
+                  <div class="clearfix"></div>
                 </div>
-                <div id="message-holder"><input id="message" placeholder="Type your Message Here" maxlength="255"></div>
-                <div id="actions">
-                    <input id="refresh" type="button" value="REFRESH LOCATION" />
-                    <input id="transmit" type="submit" value="SEND MESSAGE" />
+                <div class="well">
+                    <div id="message-holder"><input id="message" class="left" placeholder="Type your Message Here" maxlength="255"></div>
+                    <div id="actions">
+                        <input id="refresh" class="right btn btn-primary" type="button" value="REFRESH LOCATION" />
+                        <input id="transmit" class="right btn btn-success" type="submit" value="SEND MESSAGE" />
+                    </div>
+                    <div style="clear:both;"></div>
                 </div>
-                <div id="data">
-                    <div id="latitude" class="datum">Lat: &infin;</div>
-                    <div id="longitude" class="datum">Lon: &infin;</div>
-                    <div id="accuracy" class="datum">Acc: &infin;</div>
+                <div id="data row">
+                    <div class="col-md-4">
+                        <div id="latitude" class="datum">Lat: &infin;</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="longitude" class="datum">Lon: &infin;</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="accuracy" class="datum">Acc: &infin;</div>
+                    </div>
                     <div style="clear:both;"></div>
                 </div>
             </form>
         </div>
-		<footer><a href="https://github.com/tlhunter/whisper">Whisper</a>, a project by <a href="http://thomashunter.name">Thomas Hunter</a></footer>
+        <div class="footer well">
+		  <footer><a href="https://github.com/tlhunter/whisper">Whisper</a>, a project by <a href="http://thomashunter.name">Thomas Hunter</a> & <a href="http://www.jonkuperman.com">Jon Kuperman</a></footer>
+        </div>
         <script src="main.js"></script>
     </body>
 </html>

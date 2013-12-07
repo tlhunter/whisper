@@ -213,8 +213,4 @@ function go(config) {
         initiateGeoLocation();
         dirty = true;
     });
-
-    $('#info').click(function() {
-        $('#help').toggle();
-    });
 }
