@@ -17,14 +17,14 @@ function go(config) {
     var $lon = $('#longitude');
     var $acc = $('#accuracy');
 
-	$messageInput.focus();
+    $messageInput.focus();
 
-	// Update DOM Labels
-	for (var i = 0; i < 5; i++) {
-		$('#size-' + i + '-label span')
-			.text(config.levels[i].label)
-			.attr('title', config.levels[i].description);
-	}
+    // Update DOM Labels
+    for (var i = 0; i < 5; i++) {
+        $('#size-' + i + '-label span')
+            .text(config.levels[i].label)
+            .attr('title', config.levels[i].description);
+    }
 
     // If we receive old messages, our list order is now dirty and needs to be reordered.
     // I don't wan't to reorder every time we get a dirty message though since we get groups of them.
@@ -47,8 +47,8 @@ function go(config) {
     // Display a message in the DOM
     var displayMessage = function(data) {
         var date = moment(data.time)
-		var date_big = date.format('YYYY MMMM D');
-		var date_small = date.format('H:mm:ss');
+        var date_big = date.format('YYYY MMMM D');
+        var date_small = date.format('H:mm:ss');
         $messages.prepend('<div style="color: #' + data.color + '" id="msg-' + data.uuid + '" data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + date + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time>' + date_small + '<span>' + date_big + '</span></time><br />' + data.body + '</div>');
     };
 
