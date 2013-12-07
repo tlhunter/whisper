@@ -4,7 +4,7 @@
 }
 #size {
 	margin-bottom: 100px;
-	width: 631px;
+	width: 740px;
 	margin: 0 auto;
 }
 #actions {
@@ -27,6 +27,9 @@
 }
 #size ul {
 	float: left;
+}
+.sizes {
+	margin: 0 10px;
 }
 .modal-header .close {
 	color: #FFF;
