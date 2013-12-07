@@ -1,13 +1,13 @@
-var express 		= require('express');
-var web 			= express();
-var server 			= require('http').createServer(web);
-var io 				= require('socket.io').listen(server);
-var geohash 		= require('ngeohash');
-var _ 				= require('underscore')._;
-var redis 			= require('redis').createClient();
-var sanitizer	 	= require('sanitizer');
-var crypto			= require('crypto');
-var moment			= require('moment');
+var express             = require('express');
+var web                 = express();
+var server              = require('http').createServer(web);
+var io                  = require('socket.io').listen(server);
+var geohash             = require('ngeohash');
+var _                   = require('underscore')._;
+var redis               = require('redis').createClient();
+var sanitizer           = require('sanitizer');
+var crypto              = require('crypto');
+var moment              = require('moment');
 
 var config = require('./public/shared-data.json');
 
@@ -28,11 +28,11 @@ io.sockets.on('connection', function(socket) {
         size: 5,
         body: "Socket Connection Established",
         uuid: getUniqueID(),
-		color: 'FFFFFF',
+        color: 'FFFFFF',
         dirty: false
     });
 
-	// Client sent us an updated location
+    // Client sent us an updated location
     socket.on('location', function(coords) {
         var hash = geohash.encode(coords.latitude, coords.longitude);
 
@@ -50,7 +50,7 @@ io.sockets.on('connection', function(socket) {
         for (var i = 0; i < config.levels.length; i++) {
             roomName = hash.substring(0, config.levels[i].hash_accuracy);
 
-			// Here we join a 3x3 matrix of locations. Two people could be a few meteres apart and in two different squares, so this fixes that
+            // Here we join a 3x3 matrix of locations. Two people could be a few meteres apart and in two different squares, so this fixes that
             for (var adjX = -1; adjX <= 1; adjX++) {
                 for (var adjY = -1; adjY <= 1; adjY++) {
                     roomsToBeIn.push(geohash.neighbor(roomName, [adjX,adjY]));
@@ -108,15 +108,15 @@ io.sockets.on('connection', function(socket) {
         }
     });
 
-	// The client is sending out a message to other clients
+    // The client is sending out a message to other clients
     socket.on('message-to-server', function(data) {
         var size = parseInt(data.size, 10);
         var time = moment().format();
         var body = data.body.substring(0, 255);
         var coords = data.coords;
 
-		// TODO: Need a faster way to do this (e.g. no crypto or md5)
-		var color = crypto.createHash('md5').update(socket.store.id).digest('hex').substr(10,6);
+        // TODO: Need a faster way to do this (e.g. no crypto or md5)
+        var color = crypto.createHash('md5').update(socket.store.id).digest('hex').substr(10,6);
 
         // Validations
         if (size < 0 || size > 4) {
@@ -141,7 +141,7 @@ io.sockets.on('connection', function(socket) {
         var hash = geohash.encode(coords.latitude, coords.longitude);
         var roomName = hash.substring(0, config.levels[size].hash_accuracy);
 
-		// Persist this message in Redis
+        // Persist this message in Redis
         redis.hmset([
                 'msg:'+roomName+'-'+id,
                 'geohash', hash,
@@ -152,7 +152,7 @@ io.sockets.on('connection', function(socket) {
                 'size', size,
                 'uuid', id,
                 'area', roomName,
-				'color', color
+                'color', color
             ],
             function(err) {
                 if (err) {
@@ -172,7 +172,7 @@ io.sockets.on('connection', function(socket) {
                     body: sanitizer.escape(body),
                     uuid: id,
                     area: roomName,
-					color: color,
+                    color: color,
                     dirty: false
                 });
             }
