@@ -4,17 +4,17 @@
 }
 #size {
 	margin-bottom: 100px;
-	width: 740px;
 	margin: 0 auto;
+	text-align: center;
 }
 #actions {
 	float: right;
 	margin-top: 25px;
 }
 #size > span {
-	float: left;
+	display: inline-block;
 	position: relative;
-	top: 34px;
+	top: -52px;
 	margin: 0 25px;
 	padding: 7px;
 }
@@ -25,11 +25,20 @@
 	border: 1px solid #EEE;
 	text-indent: 15px;
 }
+.pagination input[type=radio] {
+	display: none;
+}
+.pagination > li > a:hover {
+	/* looks goofy without this */
+	border-color: #2a9fd6;
+}
+.pagination li label {
+	cursor: pointer;
+}
 #size ul {
-	float: left;
 }
 .sizes {
-	margin: 0 10px;
+	text-align: center;
 }
 .modal-header .close {
 	color: #FFF;

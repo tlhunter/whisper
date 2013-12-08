@@ -21,9 +21,10 @@ function go(config) {
 
     // Update DOM Labels
     for (var i = 0; i < 5; i++) {
-        $('#size-' + i + '-label span')
+        $('#size-' + i + '-label div')
             .text(config.levels[i].label)
-            .attr('title', config.levels[i].description);
+            .parents('li')
+                .attr('title', config.levels[i].description);
     }
 
     var uuids = [];
@@ -95,6 +96,8 @@ function go(config) {
     // One of the size radio buttons were cliced
     $('#size').click(function() {
         var size = $('#size input:checked').val();
+        $('#size li.active').removeClass('active');
+        $('#size-' + size + '-label').parents('li').addClass('active');
         //$messageInput.removeClass().addClass('size-'+size);
     });
 
