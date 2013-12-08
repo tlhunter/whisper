@@ -54,7 +54,6 @@
 	text-align: center;
 }
 #messages {
-	max-height: 300px;
 	overflow: auto;
 }
 .message {

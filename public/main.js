@@ -61,7 +61,7 @@ function go(config) {
         }
 
         // Scroll to bottom of message list
-        $messages.scrollTop($messages.prop("scrollHeight"));
+        $('body').scrollTop($('body').prop("scrollHeight"));
     };
 
     // I received a message from the server
