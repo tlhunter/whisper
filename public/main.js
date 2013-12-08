@@ -18,8 +18,6 @@ function go(config) {
     var $lon = $('#longitude');
     var $acc = $('#accuracy');
 
-    $messageInput.focus();
-
     // Update DOM Labels from the shared JSON file we grabbed
     for (var i = 0; i < 5; i++) {
         $('#size-' + i + '-label div')
@@ -61,7 +59,7 @@ function go(config) {
         }
 
         // Scroll to bottom of message list
-        $('body').scrollTop($('body').prop("scrollHeight"));
+        scrollToBottom();
     };
 
     // I received a message from the server
@@ -203,4 +201,11 @@ function go(config) {
     $('#refresh').click(function() {
         initiateGeoLocation();
     });
+
+    scrollToBottom();
+    $messageInput.focus();
+}
+
+function scrollToBottom() {
+    $('body').scrollTop($('body').prop("scrollHeight"));
 }
