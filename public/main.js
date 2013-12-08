@@ -190,6 +190,7 @@ function go(config) {
             return;
         }
 
+        // Clear message input
         $messageInput.val('');
 
         socket.emit('message-to-server', {

@@ -7,9 +7,8 @@
 	margin: 0 auto;
 	text-align: center;
 }
-#actions {
-	float: right;
-	margin-top: 25px;
+.actions .btn {
+	width: 100%;
 }
 #size > span {
 	display: inline-block;
@@ -56,3 +55,18 @@
 	max-height: 300px;
 	overflow: auto;
 }
+.message {
+	background-repeat: no-repeat;
+	background-position-y: center;
+	padding-left: 32px;
+}
+.message time span {
+	float: right;
+	padding-right: 20px;
+}
+.message.size-0 { background-image: url('level-0.png'); } /* WHISPER */
+.message.size-1 { background-image: url('level-1.png'); }
+.message.size-2 { background-image: url('level-2.png'); }
+.message.size-3 { background-image: url('level-3.png'); }
+.message.size-4 { background-image: url('level-4.png'); } /* SHOUT */
+.message.size-5 { background-image: url('level-0.png'); } /* ERROR */

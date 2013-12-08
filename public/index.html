@@ -19,9 +19,11 @@
                     <a id="info" href="#" data-toggle="modal" data-target="#myModal">?</a>
                 </div>
             </div>
+
             <div class="well">
                 <div id="messages"></div>
             </div>
+
             <!-- Modal -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -44,7 +46,9 @@
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
+
             <div id="map"></div>
+
             <form id="compose">
                 <div id="size">
                     <span class="left label label-primary">&laquo; Whisper</span>
@@ -57,14 +61,18 @@
                         </ul>
                   <span class="label label-danger">Shout &raquo;</span>
                 </div>
+
                 <div class="well">
-                    <div id="message-holder"><input id="message" class="left" placeholder="Type your Message Here" maxlength="255"></div>
-                    <div id="actions">
-                        <input id="refresh" class="right btn btn-primary" type="button" value="REFRESH LOCATION" />
-                        <input id="transmit" class="right btn btn-success" type="submit" value="SEND MESSAGE" />
+                    <div id="message-holder" class="col-md-10"><input id="message" class="left" placeholder="Message" maxlength="255"></div>
+                    <div class="actions col-md-1">
+                        <input id="refresh" class="right btn btn-primary" type="button" value="GPS" />
+                    </div>
+                    <div class="actions col-md-1">
+                        <input id="transmit" class="right btn btn-success" type="submit" value="SEND" />
                     </div>
                     <div style="clear:both;"></div>
                 </div>
+
                 <div id="data row">
                     <div class="col-md-4">
                         <div id="latitude" class="datum">Lat: &infin;</div>
