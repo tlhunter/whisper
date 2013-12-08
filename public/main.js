@@ -7,8 +7,9 @@ $(function() {
 });
 
 function go(config) {
-    // DOM Queries
     var socket = io.connect();
+
+    // DOM Queries
     var $messages = $('#messages');
     var $messageInput = $('#message');
     var $compose = $('form#compose');
@@ -19,7 +20,7 @@ function go(config) {
 
     $messageInput.focus();
 
-    // Update DOM Labels
+    // Update DOM Labels from the shared JSON file we grabbed
     for (var i = 0; i < 5; i++) {
         $('#size-' + i + '-label div')
             .text(config.levels[i].label)
@@ -28,11 +29,6 @@ function go(config) {
     }
 
     var uuids = [];
-
-    // To help debug stuff
-    window.uuids = function() {
-        console.log(uuids);
-    };
 
     // My last known location
     var coords = {
@@ -49,7 +45,8 @@ function go(config) {
         var html = '<div style="color: #' + data.color + '" id="msg-' + data.uuid + '" data-uuid="' + data.uuid + '" data-area="' + data.area + '" data-time="' + date + '" data-size="' + data.size + '" class="message size-' + data.size + '"><time>' + date_small + '<span>' + date_big + '</span></time><br />' + data.body + '</div>';
         var found = false;
 
-        $('#messages .message').each(function() {
+        // Fimd the first message with a higher timestamp, and put our message before it
+        $('.message', $messages).each(function() {
             if (found) return;
             var $el = $(this);
             if (parseInt(($el).attr('data-uuid'), 10) > parseInt(data.uuid, 10)) {
@@ -58,9 +55,13 @@ function go(config) {
             }
         });
 
+        // If we didn't find a message with a higher timestamp, we must be the most recent, so add it at the end
         if (!found) {
             $messages.append(html);
         }
+
+        // Scroll to bottom of message list
+        $messages.scrollTop($messages.prop("scrollHeight"));
     };
 
     // I received a message from the server
@@ -80,7 +81,7 @@ function go(config) {
         //console.log('leave-area', data);
         $messages.hide();
         for (var index in data.areas) {
-            $('#messages .message[data-area=' + data.areas[index] + ']').each(function() {
+            $('.message[data-area=' + data.areas[index] + ']', $messages).each(function() {
                 uuids.splice(uuids.indexOf($(this).attr('data-uuid')), 1);
                 $(this).remove();
             });
@@ -134,7 +135,7 @@ function go(config) {
         var $element = null;
         var time = null;
         var expire = null;
-        $('#messages .message').each(function() {
+        $('.message', $messages).each(function() {
             $element = $(this);
 
             time = new moment().format($element.attr('data-time')).d;
