@@ -1,7 +1,7 @@
 var express             = require('express');
 var web                 = express();
-var server              = require('http').createServer(web);
-var io                  = require('socket.io').listen(server);
+var server              = require('http').Server(web);
+var io                  = require('socket.io')(server);
 var geohash             = require('ngeohash');
 var _                   = require('underscore')._;
 var redis               = require('redis').createClient();
@@ -20,9 +20,9 @@ server.listen(parseInt(process.argv[2], 10) || 80);
 // Returns a unique ID. Each time it's run, you should get a number bigger than the last
 var getUniqueID = function() {
     return new Date().getTime() + "";
-}
+};
 
-io.sockets.on('connection', function(socket) {
+io.on('connection', function(socket) {
     socket.emit('message-to-client', {
         time: moment().format(),
         size: 5,
@@ -39,8 +39,8 @@ io.sockets.on('connection', function(socket) {
         var roomsToBeIn = [];
 
         // Building list of rooms to be in
-        var roomsCurrentlyIn = _.keys(io.sockets.manager.roomClients[socket.id]);
-        roomsCurrentlyIn.shift(); // remove first blank room
+        var roomsCurrentlyIn = socket.rooms;
+
         for (var index in roomsCurrentlyIn) {
             roomsCurrentlyIn[index] = roomsCurrentlyIn[index].slice(1); // Remove room leading slash
         }
@@ -114,7 +114,7 @@ io.sockets.on('connection', function(socket) {
         var coords = data.coords;
 
         // TODO: Need a faster way to do this (e.g. no crypto or md5)
-        var color = crypto.createHash('md5').update(socket.store.id).digest('hex').substr(10,6);
+        var color = crypto.createHash('md5').update(socket.id).digest('hex').substr(10,6);
 
         // Validations
         if (size < 0 || size > 4) {
@@ -170,7 +170,7 @@ io.sockets.on('connection', function(socket) {
                     body: sanitizer.escape(body),
                     uuid: id,
                     area: roomName,
-                    color: color,
+                    color: color
                 });
             }
         );
