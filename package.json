@@ -9,7 +9,7 @@
     "moment": "^2.8.4",
     "ngeohash": "^0.2.0",
     "redis": "^0.8.2",
-    "sanitizer": "^0.0.15",
+    "sanitizer": "^0.1.2",
     "socket.io": "^0.9.13",
     "underscore": "^1.7.0"
   }
