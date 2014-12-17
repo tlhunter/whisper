@@ -11,6 +11,6 @@
     "redis": "^0.8.2",
     "sanitizer": "^0.0.15",
     "socket.io": "^0.9.13",
-    "underscore": "^1.4.3"
+    "underscore": "^1.7.0"
   }
 }
