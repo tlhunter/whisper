@@ -1,15 +1,16 @@
 {
-    "name": "node-whisper",
-    "version": "0.1.0",
-    "author": "Thomas Hunter <tlhunter@gmail.com>",
-    "dependencies": {
-        "express": "^3.0.6",
-        "hiredis": "^0.1.14",
-        "ngeohash": "^0.2.0",
-        "redis": "^0.8.2",
-        "socket.io": "^0.9.13",
-        "sanitizer": "^0.0.15",
-        "underscore": "^1.4.3",
-        "moment": "^2.4.0"
-    }
+  "name": "node-whisper",
+  "private": true,
+  "version": "0.1.0",
+  "author": "Thomas Hunter II <me@thomashunter.name>",
+  "dependencies": {
+    "express": "^3.0.6",
+    "hiredis": "^0.1.14",
+    "moment": "^2.8.4",
+    "ngeohash": "^0.2.0",
+    "redis": "^0.8.2",
+    "sanitizer": "^0.0.15",
+    "socket.io": "^0.9.13",
+    "underscore": "^1.4.3"
+  }
 }
