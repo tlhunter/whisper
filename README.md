@@ -1,19 +1,27 @@
 # Whisper
-Ephemeral, geo-location based communication
+Ephemeral, geo-location based semi-anonymous communication
+
+* Messages can be loud or quiet
+* Loud messages have a larger radius and die quicker
+* Quiet messages have a smaller radius and last longer
 
 ## Screenshot
 ![Screenshot](https://raw.github.com/tlhunter/whisper/master/screenshot.png)
+
+## Usage
+
+```console
+$ git clone git@github.com:tlhunter/whisper.git
+$ cd whisper
+$ npm install
+$ ./server.js 8000
+```
 
 ## Technologies
 * REDIS for storing messages
 * Node.js for web server
 * HTML5 Geolocation
-* Websockets
-
-## More Details
-* Messages can be loud or quiet
-* Loud messages have a larger radius and die quicker
-* Quiet messages have a smaller radius and last longer
+* Socket.IO for Websockets
 
 ## Data
 Due to the expiring, small data size, and rate of access, REDIS seems the appropriate choice
@@ -35,6 +43,8 @@ This will be a webpage, very simple, works on mobile, uses HTML5 geolocation API
 ## Debugging
 This chrome extension makes debugging a bit easier (so you don't have to walk around with a laptop):
 [Manual Geolocation](https://chrome.google.com/webstore/detail/manual-geolocation/mfodligkojepnddfhkbkodbamcagfhlo)
+
+> TODO: This plugin no longer exists! How will we ever test Whisper!
 
 ## License
 BSD

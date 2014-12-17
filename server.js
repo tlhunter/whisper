@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var express             = require('express');
 var web                 = express();
 var server              = require('http').Server(web);
