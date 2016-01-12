@@ -17,7 +17,9 @@ var config = require('./public/shared-data.json');
 web.use('/', express.static(__dirname + '/public'));
 
 // Port number is either the first argument or 80
-server.listen(parseInt(process.argv[2], 10) || 80);
+var port = parseInt(process.argv[2], 10) || 80;
+var host = process.argv[3];
+server.listen(port, host);
 
 // Returns a unique ID. Each time it's run, you should get a number bigger than the last
 var getUniqueID = function() {
