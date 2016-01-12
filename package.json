@@ -1,7 +1,7 @@
 {
   "name": "node-whisper",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Thomas Hunter II <me@thomashunter.name>",
   "dependencies": {
     "express": "^4.10.6",
