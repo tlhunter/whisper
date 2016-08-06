@@ -47,4 +47,6 @@ This chrome extension makes debugging a bit easier (so you don't have to walk ar
 > TODO: This plugin no longer exists! How will we ever test Whisper!
 
 ## License
-BSD
+
+* BSD License
+* Copyright 2013 Thomas Hunter II
